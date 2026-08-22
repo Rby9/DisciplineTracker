@@ -1,24 +1,25 @@
-//
-//  ContentView.swift
-//  DisciplineTracker
-//
-//  Created by Robert Balaban on 22/08/2026.
-//
-
 import SwiftUI
 
 struct ContentView: View {
+    let sampleTask = TaskItem(
+        id: UUID(),
+        title: "Sala dimineata",
+        category: .gym,
+        startTime: Date(),
+        isCompleted: false,
+        notes: ""
+    )
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        VStack(spacing: 16 ) {
+            Text(sampleTask.title)
+                .font(.title)
+            Text(sampleTask.category.rawValue)
+                .foregroundStyle(.secondary)
         }
         .padding()
     }
 }
-
-#Preview {
+#Preview{
     ContentView()
 }
