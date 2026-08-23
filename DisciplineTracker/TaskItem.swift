@@ -1,4 +1,5 @@
 import Foundation
+import SwiftUI
 
 struct TaskItem: Identifiable {
     let id: UUID
@@ -15,4 +16,14 @@ enum TaskCategory : String, CaseIterable {
     case work = "Work"
     case sleep = "Sleep"
     case other = "Other"
+    
+    var color: Color {
+        switch self {
+        case .gym: return .red
+        case .food: return .orange
+        case .work: return .blue
+        case .sleep: return .purple
+        case .other: return .gray
+        }
+    }
 }
