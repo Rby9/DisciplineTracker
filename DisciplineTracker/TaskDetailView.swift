@@ -2,7 +2,7 @@ import SwiftUI
 
 struct TaskDetailView: View {
     // NOU: @Binding - "împrumută" taskul din ContentView, orice schimbare aici se vede și acolo
-    @Binding var task: TaskItem
+    let task: TaskItem
     
     var body: some View {
         // NOU: Form - layout gata făcut pentru ecrane cu date de completat (ca în Settings)
@@ -15,13 +15,13 @@ struct TaskDetailView: View {
             
             Section("Notes") {
                 // NOU: TextField cu $task.notes - câmp editabil legat direct de nota taskului
-                TextField("Add notes...", text: $task.notes, axis: .vertical)
+                TextField("Add notes...", text: Bindable(task).notes, axis: .vertical)
                     .lineLimit(3...6)
             }
             
             Section {
                 // NOU: Toggle - comutator vizual, legat de isCompleted
-                Toggle("Completed", isOn: $task.isCompleted)
+                Toggle("Completed", isOn: Bindable(task).isCompleted)
             }
         }
         .navigationTitle("Task Details")

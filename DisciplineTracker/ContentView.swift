@@ -1,57 +1,61 @@
 import SwiftUI
+import SwiftData
 
 struct ContentView: View {
-    @State private var tasks: [TaskItem] = [
-        TaskItem(id: UUID(), title: "Sala dimineață", category: .gym, startTime: Date(), isCompleted: false, notes: ""),
-        TaskItem(id: UUID(), title: "Prânz", category: .food, startTime: Date(), isCompleted: false, notes: ""),
-        TaskItem(id: UUID(), title: "Lucru", category: .work, startTime: Date(), isCompleted: false, notes: "")
-    ]
-    
-    init(){
-        for task in tasks {
-            NotificationManager.shared.scheduleNotifications(for: task)
-        }
-    }
+
+    @Query private var tasks: [TaskItem]
+    @State private var showAddTask = false
     
     var body: some View {
-        // NOU: NavigationStack - "containerul" care permite trecerea de la un ecran la altul
+
         NavigationStack {
-            // NOU: $tasks (cu $) în loc de tasks - dă acces de citire+scriere, nu doar citire
-            List($tasks) { $task in
-                // NOU: NavigationLink - face tot rândul apăsabil, deschide TaskDetailView la tap
+            List(tasks) { task in
                 NavigationLink {
-                    TaskDetailView(task: $task)
+                    TaskDetailView(task: task)
                 } label: {
                     HStack {
                         Button {
                             toggleTask(task)
                         } label: {
-                            Image(systemName: task.isCompleted ? "checkmark.circle.fill" : "circle")
+                            Image(
+                                systemName: task.isCompleted
+                                    ? "checkmark.circle.fill"
+                                    : "circle"
+                            )
                         }
-                        // NOU: .buttonStyle(.plain) - fără asta, tot rândul ar reacționa vizual ca un buton mare
                         .buttonStyle(.plain)
-                        
+
                         Text(task.title)
                             .strikethrough(task.isCompleted)
-                        
+
                         Spacer()
+
                         Text(task.category.rawValue)
                             .foregroundStyle(task.category.color)
                     }
                 }
             }
-            // NOU: titlu afișat sus pe ecran
             .navigationTitle("Discipline Tracker")
+            .toolbar {
+
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        showAddTask = true
+                    } label: {
+                        Image(systemName: "plus")
+                    }
+                }
+            }
+            .sheet(isPresented: $showAddTask) {
+                AddTaskView()
+            }
         }
     }
-    
+
     func toggleTask(_ task: TaskItem) {
-        if let index = tasks.firstIndex(where: { $0.id == task.id }) {
-            tasks[index].isCompleted.toggle()
-            
-            if tasks[index].isCompleted {
-                NotificationManager.shared.cancelNotifications(for: tasks[index])
-            }
+        task.isCompleted.toggle()
+        if task.isCompleted {
+            NotificationManager.shared.cancelNotifications(for: task)
         }
     }
 }

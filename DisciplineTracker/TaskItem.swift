@@ -1,16 +1,27 @@
 import Foundation
 import SwiftUI
+import SwiftData
 
-struct TaskItem: Identifiable {
-    let id: UUID
+@Model
+class TaskItem {
+    var id: UUID
     var title: String
     var category: TaskCategory
     var startTime: Date
     var isCompleted: Bool
     var notes: String
+    
+    init(id: UUID = UUID(), title: String, category: TaskCategory, startTime: Date, isCompleted: Bool, notes: String) {
+        self.id = id
+        self.title = title
+        self.category = category
+        self.startTime = startTime
+        self.isCompleted = isCompleted
+        self.notes = notes
+    }
 }
 
-enum TaskCategory : String, CaseIterable {
+enum TaskCategory : String, CaseIterable, Codable {
     case gym = "Gym"
     case food = "Food"
     case work = "Work"
