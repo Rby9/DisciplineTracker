@@ -7,6 +7,12 @@ struct ContentView: View {
         TaskItem(id: UUID(), title: "Lucru", category: .work, startTime: Date(), isCompleted: false, notes: "")
     ]
     
+    init(){
+        for task in tasks {
+            NotificationManager.shared.scheduleNotifications(for: task)
+        }
+    }
+    
     var body: some View {
         // NOU: NavigationStack - "containerul" care permite trecerea de la un ecran la altul
         NavigationStack {
@@ -42,6 +48,10 @@ struct ContentView: View {
     func toggleTask(_ task: TaskItem) {
         if let index = tasks.firstIndex(where: { $0.id == task.id }) {
             tasks[index].isCompleted.toggle()
+            
+            if tasks[index].isCompleted {
+                NotificationManager.shared.cancelNotifications(for: tasks[index])
+            }
         }
     }
 }
