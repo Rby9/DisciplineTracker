@@ -1,32 +1,97 @@
 import SwiftUI
+import Foundation
 
 struct TaskDetailView: View {
-    // NOU: @Binding - "împrumută" taskul din ContentView, orice schimbare aici se vede și acolo
-    let task: TaskItem
-    
+
+    @State private var currentTime = Date()
+    @State private var isEditing = false
+
+    @Bindable var task: TaskItem
+
+    private var estimatedTimeRemaining: String {
+
+        if task.isCompleted {
+            return "Completed"
+        }
+
+        let secondsRemaining = task.startTime.timeIntervalSince(currentTime)
+
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = [.day, .hour, .minute]
+        formatter.unitsStyle = .abbreviated
+        formatter.maximumUnitCount = 2
+        formatter.zeroFormattingBehavior = .dropAll
+
+        if secondsRemaining <= 0 {
+
+            let overdueText = formatter.string(from: abs(secondsRemaining)) ?? "0m"
+
+            return "Overdue by \(overdueText)"
+        }
+
+        let remainingText = formatter.string(from: secondsRemaining) ?? "0m"
+
+        return "Starts in \(remainingText)"
+    }
+
     var body: some View {
-        // NOU: Form - layout gata făcut pentru ecrane cu date de completat (ca în Settings)
+
         Form {
+
             Section("Task") {
+
                 Text(task.title)
+
                 Text(task.category.rawValue)
                     .foregroundStyle(task.category.color)
+
+                Text(estimatedTimeRemaining)
+                    .font(.headline)
+                    .foregroundStyle(.secondary)
             }
-            
+
             Section("Notes") {
-                // NOU: TextField cu $task.notes - câmp editabil legat direct de nota taskului
-                TextField("Add notes...", text: Bindable(task).notes, axis: .vertical)
-                    .lineLimit(3...6)
+
+                TextField(
+                    "Add notes...",
+                    text: Bindable(task).notes,
+                    axis: .vertical
+                )
+                .lineLimit(3...6)
             }
-            
+
             Section {
-                // NOU: Toggle - comutator vizual, legat de isCompleted
-                Toggle("Completed", isOn: Bindable(task).isCompleted)
+
+                Toggle(
+                    "Completed",
+                    isOn: Bindable(task).isCompleted
+                )
             }
         }
         .navigationTitle("Task Details")
+        .toolbar{
+            ToolbarItem(placement: .topBarTrailing) {
+                Button("Edit") {
+                    isEditing = true
+                }
+            }
+            
+        }
+        .sheet(isPresented: $isEditing) {
+            EditTaskView(task: task)
+        }
+        .task {
+
+            while !Task.isCancelled {
+
+                try? await Task.sleep(for: .seconds(30))
+
+                currentTime = Date()
+            }
+        }
     }
 }
 
-// NOTĂ: am scos #Preview de aici temporar - are nevoie de un parametru special (Binding constant)
-// pe care-l putem adăuga mai târziu dacă vrei preview izolat pentru acest ecran
+#Preview {
+    ContentView()
+}
