@@ -1,10 +1,15 @@
 import SwiftUI
 import Foundation
+import SwiftData
 
 struct TaskDetailView: View {
 
     @State private var currentTime = Date()
     @State private var isEditing = false
+    @State private var showDeleteConfirmation = false
+
+    @Environment(\.modelContext) private var modelContext
+    @Environment(\.dismiss) private var dismiss
 
     @Bindable var task: TaskItem
 
@@ -24,12 +29,16 @@ struct TaskDetailView: View {
 
         if secondsRemaining <= 0 {
 
-            let overdueText = formatter.string(from: abs(secondsRemaining)) ?? "0m"
+            let overdueText = formatter.string(
+                from: abs(secondsRemaining)
+            ) ?? "0m"
 
             return "Overdue by \(overdueText)"
         }
 
-        let remainingText = formatter.string(from: secondsRemaining) ?? "0m"
+        let remainingText = formatter.string(
+            from: secondsRemaining
+        ) ?? "0m"
 
         return "Starts in \(remainingText)"
     }
@@ -67,19 +76,53 @@ struct TaskDetailView: View {
                     isOn: Bindable(task).isCompleted
                 )
             }
+
+            Section {
+
+                Button("Delete Task", role: .destructive) {
+                    showDeleteConfirmation = true
+                }
+            }
         }
         .navigationTitle("Task Details")
-        .toolbar{
+
+        .alert(
+            "Delete Task?",
+            isPresented: $showDeleteConfirmation
+        ) {
+
+            Button("Cancel", role: .cancel) {
+            }
+
+            Button("Delete", role: .destructive) {
+
+                NotificationManager.shared.cancelNotifications(for: task)
+
+                modelContext.delete(task)
+
+                dismiss()
+            }
+
+        } message: {
+
+            Text("Are you sure you want to delete this task?")
+        }
+
+        .toolbar {
+
             ToolbarItem(placement: .topBarTrailing) {
+
                 Button("Edit") {
                     isEditing = true
                 }
             }
-            
         }
+
         .sheet(isPresented: $isEditing) {
+
             EditTaskView(task: task)
         }
+
         .task {
 
             while !Task.isCancelled {

@@ -60,6 +60,11 @@ struct EditTaskView: View {
                 ToolbarItem(placement: .confirmationAction) {
 
                     Button("Done") {
+                        
+                        NotificationManager.shared.cancelNotifications(for: task)
+                        
+                        NotificationManager.shared.scheduleNotifications(for: task)
+                        
                         dismiss()
                     }
                 }
