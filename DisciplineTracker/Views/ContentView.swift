@@ -3,6 +3,8 @@ import SwiftData
 
 struct ContentView: View {
     
+    // MARK: - Properties
+    
     @Query private var tasks: [TaskItem]
     
     @State private var showAddTask = false
@@ -12,42 +14,8 @@ struct ContentView: View {
         Calendar.current
     }
     
-    // MARK: - Calendar Dates
     
-    private var calendarDates: [Date] {
-        let today = calendar.startOfDay(for: Date())
-        
-        return (-5...5).compactMap {
-            calendar.date(
-                byAdding: .day,
-                value: $0,
-                to: today
-            )
-        }
-    }
-    
-    // MARK: - Progress
-    
-    private func progressForDate(_ date: Date) -> Double {
-        let dayTasks = tasks.filter {
-            calendar.isDate(
-                $0.startTime,
-                inSameDayAs: date
-            )
-        }
-        
-        guard !dayTasks.isEmpty else {
-            return 0
-        }
-        
-        let completed = dayTasks.filter {
-            $0.isCompleted
-        }.count
-        
-        return Double(completed) / Double(dayTasks.count)
-    }
-    
-    // MARK: - Selected Day
+    // MARK: - Computed Properties
     
     private var selectedDayTasks: [TaskItem] {
         tasks.filter {
@@ -73,74 +41,22 @@ struct ContentView: View {
             / Double(selectedDayTasks.count)
     }
     
+    
     // MARK: - Body
     
     var body: some View {
         NavigationStack {
             ZStack {
-                Color(hex: "0D0B16")
-                    .ignoresSafeArea()
+                background
                 
                 ScrollView {
                     VStack(spacing: 0) {
-                        
-                        // MARK: - Header
-                        
-                        DashboardHeader()
-                        
-                        // MARK: - Progress
-                        
-                        ProgressHeaderView(
-                            progress: progress,
-                            completedTask: completedTasks,
-                            totalTask: selectedDayTasks.count
-                        )
-                        .padding(.bottom, 28)
-                        
-                        // MARK: - Date Strip
-                        
-                        DateStripView(
-                            tasks: tasks,
-                            selectedDate: $selectedDate
-                        )
-                        .padding(.bottom, 28)
-                        
-                        // MARK: - Tasks Header
-                        
-                        TasksHeader(
-                            selectedDate: selectedDate,
-                            isToday: isToday(selectedDate),
-                            onAddTask: {
-                                showAddTask = true
-                            }
-                        )
-                        
-                        // MARK: - Task Cards
-                        
-                        LazyVStack(spacing: 12) {
-                            ForEach(selectedDayTasks) { task in
-                                NavigationLink {
-                                    TaskDetailView(task: task)
-                                } label: {
-                                    TaskCardView(
-                                        task: task,
-                                        onToggle: {
-                                            toggleTask(task)
-                                        }
-                                    )
-                                }
-                                .buttonStyle(.plain)
-                            }
-                        }
-                        .padding(.horizontal, 16)
-                        
-                        // MARK: - Empty State
-                        
-                        if selectedDayTasks.isEmpty {
-                            EmptyTaskView(
-                                isToday: isToday(selectedDate)
-                            )
-                        }
+                        dashboardHeader
+                        progressHeader
+                        dateStrip
+                        tasksHeader
+                        taskList
+                        emptyState
                     }
                     .padding(.bottom, 30)
                 }
@@ -154,6 +70,74 @@ struct ContentView: View {
             }
         }
     }
+    
+    
+    // MARK: - View Components
+    
+    private var background: some View {
+        Color(hex: "0D0B16")
+            .ignoresSafeArea()
+    }
+    
+    private var dashboardHeader: some View {
+        DashboardHeader()
+    }
+    
+    private var progressHeader: some View {
+        ProgressHeaderView(
+            progress: progress,
+            completedTask: completedTasks,
+            totalTask: selectedDayTasks.count
+        )
+        .padding(.bottom, 28)
+    }
+    
+    private var dateStrip: some View {
+        DateStripView(
+            tasks: tasks,
+            selectedDate: $selectedDate
+        )
+        .padding(.bottom, 28)
+    }
+    
+    private var tasksHeader: some View {
+        TasksHeader(
+            selectedDate: selectedDate,
+            isToday: isToday(selectedDate),
+            onAddTask: {
+                showAddTask = true
+            }
+        )
+    }
+    
+    private var taskList: some View {
+        LazyVStack(spacing: 12) {
+            ForEach(selectedDayTasks) { task in
+                NavigationLink {
+                    TaskDetailView(task: task)
+                } label: {
+                    TaskCardView(
+                        task: task,
+                        onToggle: {
+                            toggleTask(task)
+                        }
+                    )
+                }
+                .buttonStyle(.plain)
+            }
+        }
+        .padding(.horizontal, 16)
+    }
+    
+    @ViewBuilder
+    private var emptyState: some View {
+        if selectedDayTasks.isEmpty {
+            EmptyTaskView(
+                isToday: isToday(selectedDate)
+            )
+        }
+    }
+    
     
     // MARK: - Helpers
     
@@ -171,6 +155,7 @@ struct ContentView: View {
         }
     }
 }
+
 
 #Preview {
     ContentView()

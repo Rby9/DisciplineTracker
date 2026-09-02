@@ -4,6 +4,9 @@ import SwiftData
 
 @Model
 class TaskItem {
+    
+    // MARK: - Properties
+    
     var id: UUID
     var title: String
     var category: TaskCategory
@@ -11,7 +14,17 @@ class TaskItem {
     var isCompleted: Bool
     var notes: String
     
-    init(id: UUID = UUID(), title: String, category: TaskCategory, startTime: Date, isCompleted: Bool, notes: String) {
+    
+    // MARK: - Initialization
+    
+    init(
+        id: UUID = UUID(),
+        title: String,
+        category: TaskCategory,
+        startTime: Date,
+        isCompleted: Bool,
+        notes: String
+    ) {
         self.id = id
         self.title = title
         self.category = category
@@ -21,20 +34,36 @@ class TaskItem {
     }
 }
 
-enum TaskCategory : String, CaseIterable, Codable {
+
+// MARK: - Task Category
+
+enum TaskCategory: String, CaseIterable, Codable {
+    
     case gym = "Gym"
     case food = "Food"
     case work = "Work"
     case sleep = "Sleep"
     case other = "Other"
     
+    
+    // MARK: - Appearance
+    
     var color: Color {
         switch self {
-        case .gym: return .red
-        case .food: return .orange
-        case .work: return .blue
-        case .sleep: return .purple
-        case .other: return .gray
+        case .gym:
+            return .red
+            
+        case .food:
+            return .orange
+            
+        case .work:
+            return .blue
+            
+        case .sleep:
+            return .purple
+            
+        case .other:
+            return .gray
         }
     }
 }
