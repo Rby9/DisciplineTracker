@@ -13,9 +13,14 @@ struct AddTaskView: View {
     
     @State private var title = ""
     @State private var category: TaskCategory = .other
-    @State private var startTime = Date()
+    @State private var startTime: Date
     @State private var notes = ""
     
+    // MARK: - Initialization
+
+    init(selectedDate: Date) {
+        _startTime = State(initialValue: selectedDate)
+    }
     
     // MARK: - Body
     
@@ -129,5 +134,5 @@ struct AddTaskView: View {
 
 
 #Preview {
-    AddTaskView()
+    AddTaskView(selectedDate: Date())
 }

@@ -66,7 +66,7 @@ struct ContentView: View {
                 for: .navigationBar
             )
             .sheet(isPresented: $showAddTask) {
-                AddTaskView()
+                AddTaskView(selectedDate: selectedDate)
             }
         }
     }
