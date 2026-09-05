@@ -2,19 +2,33 @@ import SwiftUI
 import SwiftData
 
 struct EditTaskView: View {
-    
+
     // MARK: - Environment
-    
+
     @Environment(\.dismiss) private var dismiss
-    
-    
+
     // MARK: - Properties
-    
-    @Bindable var task: TaskItem
-    
-    
+
+    let task: TaskItem
+
+    @State private var title: String
+    @State private var category: TaskCategory
+    @State private var startTime: Date
+    @State private var notes: String
+
+    // MARK: - Initialization
+
+    init(task: TaskItem) {
+        self.task = task
+
+        _title = State(initialValue: task.title)
+        _category = State(initialValue: task.category)
+        _startTime = State(initialValue: task.startTime)
+        _notes = State(initialValue: task.notes)
+    }
+
     // MARK: - Body
-    
+
     var body: some View {
         NavigationStack {
             Form {
@@ -27,97 +41,74 @@ struct EditTaskView: View {
             }
         }
     }
-    
-    
+
     // MARK: - View Components
-    
+
     private var taskSection: some View {
         Section("Task") {
-            TextField(
-                "Title",
-                text: $task.title
-            )
-            
-            Picker(
-                "Category",
-                selection: $task.category
-            ) {
-                ForEach(
-                    TaskCategory.allCases,
-                    id: \.self
-                ) { category in
+            TextField("Title", text: $title)
+
+            Picker("Category", selection: $category) {
+                ForEach(TaskCategory.allCases, id: \.self) { category in
                     Text(category.rawValue)
                         .tag(category)
                 }
             }
-            
+
             DatePicker(
                 "Time",
-                selection: $task.startTime,
-                displayedComponents: [
-                    .date,
-                    .hourAndMinute
-                ]
+                selection: $startTime,
+                displayedComponents: [.date, .hourAndMinute]
             )
         }
     }
-    
+
     private var notesSection: some View {
         Section("Notes") {
             TextField(
                 "Add notes...",
-                text: $task.notes,
+                text: $notes,
                 axis: .vertical
             )
             .lineLimit(3...6)
         }
     }
-    
-    
+
     // MARK: - Toolbar
-    
+
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
-        ToolbarItem(
-            placement: .cancellationAction
-        ) {
+        ToolbarItem(placement: .cancellationAction) {
             Button("Cancel") {
                 dismiss()
             }
         }
-        
-        ToolbarItem(
-            placement: .confirmationAction
-        ) {
+
+        ToolbarItem(placement: .confirmationAction) {
             Button("Done") {
                 saveChanges()
             }
+            .disabled(
+                title.trimmingCharacters(
+                    in: .whitespacesAndNewlines
+                ).isEmpty
+            )
         }
     }
-    
-    
+
     // MARK: - Actions
-    
+
     private func saveChanges() {
-        NotificationManager.shared
-            .cancelNotifications(for: task)
-        
+        task.title = title.trimmingCharacters(
+            in: .whitespacesAndNewlines
+        )
+        task.category = category
+        task.startTime = startTime
+        task.notes = notes
+
         NotificationManager.shared
             .scheduleNotifications(for: task)
-        
+
         dismiss()
     }
-}
-
-
-#Preview {
-    EditTaskView(
-        task: TaskItem(
-            title: "Example Task",
-            category: .other,
-            startTime: Date(),
-            isCompleted: false,
-            notes: ""
-        )
-    )
 }
