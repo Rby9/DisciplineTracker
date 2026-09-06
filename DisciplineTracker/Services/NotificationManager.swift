@@ -3,13 +3,15 @@ import SwiftData
 import UserNotifications
 
 @MainActor
-final class NotificationManager {
+final class NotificationManager: NSObject, UNUserNotificationCenterDelegate {
 
     // MARK: - Singleton
 
     static let shared = NotificationManager()
 
-    private init() {}
+    private override init() {
+        super.init()
+    }
 
     // MARK: - Properties
 
@@ -25,6 +27,7 @@ final class NotificationManager {
 
     func configure(with context: ModelContext) {
         modelContext = context
+        UNUserNotificationCenter.current().delegate = self
     }
 
     // MARK: - Permission
@@ -53,6 +56,11 @@ final class NotificationManager {
 
     func scheduleNotifications(for task: TaskItem) {
         excludedTaskIDs.remove(task.id)
+        if !task.isPending {
+            UNUserNotificationCenter.current().removePendingNotificationRequests(
+                withIdentifiers: identifiers(for: task.id)
+            )
+        }
         refreshNotifications()
     }
 
@@ -88,7 +96,7 @@ final class NotificationManager {
             ] = []
 
             for task in tasks {
-                guard !task.isCompleted,
+                guard task.isPending,
                       !excludedTaskIDs.contains(task.id) else {
                     continue
                 }
@@ -147,8 +155,7 @@ final class NotificationManager {
 
             events.sort {
                 if $0.date == $1.date {
-                    return $0.request.identifier
-                        < $1.request.identifier
+                    return $0.request.identifier < $1.request.identifier
                 }
 
                 return $0.date < $1.date
@@ -219,6 +226,8 @@ final class NotificationManager {
             queuedRequests = nil
 
             let pending = await center.pendingNotificationRequests()
+            // A newer task state arrived while awaiting the system.
+            if queuedRequests != nil { continue }
 
             let managed = pending.filter {
                 isTaskNotification($0.identifier)
@@ -235,6 +244,7 @@ final class NotificationManager {
             )
 
             for request in requests.prefix(availableSlots) {
+                if queuedRequests != nil { break }
                 guard let trigger = request.trigger
                     as? UNCalendarNotificationTrigger,
                       let nextDate = trigger.nextTriggerDate(),
@@ -253,6 +263,15 @@ final class NotificationManager {
         }
 
         isProcessingQueue = false
+    }
+
+    // Show reminders while the app is open as well as on the lock screen.
+    nonisolated func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        willPresent notification: UNNotification,
+        withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
+    ) {
+        completionHandler([.banner, .sound])
     }
 
     // MARK: - Helpers

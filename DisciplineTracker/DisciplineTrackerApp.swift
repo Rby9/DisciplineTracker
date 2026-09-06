@@ -18,7 +18,8 @@ struct DisciplineTrackerApp: App {
         do {
             modelContainer = try ModelContainer(
                 for: TaskItem.self,
-                TaskSeries.self
+                TaskSeries.self,
+                JournalEntry.self
             )
         } catch {
             fatalError(

@@ -6,6 +6,9 @@ struct EditTaskView: View {
     // MARK: - Environment
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
+    @State private var showError = false
+    @State private var errorMessage = ""
 
     // MARK: - Properties
 
@@ -31,11 +34,14 @@ struct EditTaskView: View {
 
     var body: some View {
         NavigationStack {
-            Form {
+            AppForm {
                 taskSection
                 notesSection
             }
             .navigationTitle("Edit Task")
+            .alert("Could not save task", isPresented: $showError) {
+                Button("OK", role: .cancel) {}
+            } message: { Text(errorMessage) }
             .toolbar {
                 toolbar
             }
@@ -99,16 +105,21 @@ struct EditTaskView: View {
     // MARK: - Actions
 
     private func saveChanges() {
-        task.title = title.trimmingCharacters(
-            in: .whitespacesAndNewlines
-        )
-        task.category = category
-        task.startTime = startTime
-        task.notes = notes
-
-        NotificationManager.shared
-            .scheduleNotifications(for: task)
-
-        dismiss()
+        var beganChanges = false
+        do {
+            try modelContext.save()
+            beganChanges = true
+            task.title = title.trimmingCharacters(in: .whitespacesAndNewlines)
+            task.category = category
+            task.startTime = startTime
+            task.notes = notes
+            try modelContext.save()
+            NotificationManager.shared.scheduleNotifications(for: task)
+            dismiss()
+        } catch {
+            if beganChanges { modelContext.rollback() }
+            errorMessage = error.localizedDescription
+            showError = true
+        }
     }
 }

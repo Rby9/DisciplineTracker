@@ -171,7 +171,7 @@ struct AddTaskView: View {
 
     var body: some View {
         NavigationStack {
-            Form {
+            AppForm {
                 taskSection
                 repeatSection
 
@@ -383,74 +383,15 @@ struct AddTaskView: View {
     // MARK: - Date Generation
 
     private func occurrenceDates() throws -> [Date] {
-        guard isRecurring else {
-            return [startTime]
-        }
-
-        guard !activeWeekdays.isEmpty else {
-            throw FormError.noWeekdays
-        }
-
-        let firstDay = calendar.startOfDay(for: startTime)
-        let lastDay = calendar.startOfDay(for: endDate)
-
-        guard lastDay >= firstDay else {
-            throw FormError.invalidEndDate
-        }
-
-        let span = calendar.dateComponents(
-            [.day],
-            from: firstDay,
-            to: lastDay
-        ).day ?? 0
-
-        guard span < 3650 else {
-            throw FormError.periodTooLong
-        }
-
-        let time = calendar.dateComponents(
-            [.hour, .minute],
-            from: startTime
+        guard isRecurring else { return [startTime] }
+        let time = calendar.dateComponents([.hour, .minute], from: startTime)
+        let dates = try RecurrenceSchedule.dates(
+            from: startTime, through: endDate,
+            hour: time.hour ?? 0, minute: time.minute ?? 0,
+            weekdays: Set(activeWeekdays), calendar: calendar
         )
-
-        var result: [Date] = []
-
-        for offset in 0...span {
-            guard let day = calendar.date(
-                byAdding: .day,
-                value: offset,
-                to: firstDay
-            ) else {
-                throw FormError.invalidDate
-            }
-
-            let weekday = calendar.component(
-                .weekday,
-                from: day
-            )
-
-            guard activeWeekdays.contains(weekday) else {
-                continue
-            }
-
-            guard let scheduledDate = calendar.date(
-                bySettingHour: time.hour ?? 0,
-                minute: time.minute ?? 0,
-                second: 0,
-                of: day
-            ),
-            calendar.isDate(scheduledDate, inSameDayAs: day) else {
-                throw FormError.invalidDate
-            }
-
-            result.append(scheduledDate)
-        }
-
-        guard !result.isEmpty else {
-            throw FormError.noOccurrences
-        }
-
-        return result
+        guard !dates.isEmpty else { throw FormError.noOccurrences }
+        return dates
     }
 
     // MARK: - Save

@@ -6,17 +6,21 @@ struct ContentView: View {
 
     // MARK: - Environment
 
+    @Environment(\.modelContext) private var modelContext
+    @State private var showStatusError = false
+    @State private var statusErrorMessage = ""
+
     @Environment(\.accessibilityReduceMotion)
     private var reduceMotion
 
     // MARK: - Properties
 
+    @Binding var selectedDate: Date
+
     @Query private var tasks: [TaskItem]
 
     @State private var appearedTaskIDs: Set<UUID> = []
     @State private var showAddTask = false
-    @State private var selectedDate = Date()
-
     @State private var scrollOffset: CGFloat = 0
     @State private var progressReloadID = 0
     @State private var isProgressReloadArmed = false
@@ -37,9 +41,7 @@ struct ContentView: View {
     }
 
     private var completedTasks: Int {
-        selectedDayTasks.filter {
-            $0.isCompleted
-        }.count
+        selectedDayTasks.filter { $0.isCompleted }.count
     }
 
     private var progress: Double {
@@ -66,27 +68,22 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                background
+                Color(hex: "0D0B16")
+                    .ignoresSafeArea()
+
                 mainScrollView
             }
-            .toolbar(
-                .hidden,
-                for: .navigationBar
-            )
-            .sheet(isPresented: $showAddTask) {
+            .toolbar(.hidden, for: .navigationBar)
+            .alert("Could not update task", isPresented: $showStatusError) {
+            Button("OK", role: .cancel) {}
+        } message: { Text(statusErrorMessage) }
+        .sheet(isPresented: $showAddTask) {
                 AddTaskView(selectedDate: selectedDate)
             }
         }
     }
 
-    // MARK: - Background
-
-    private var background: some View {
-        Color(hex: "0D0B16")
-            .ignoresSafeArea()
-    }
-
-    // MARK: - Main Scroll View
+    // MARK: - Scroll View
 
     private var mainScrollView: some View {
         ScrollView {
@@ -111,29 +108,21 @@ struct ContentView: View {
         }
     }
 
-    // MARK: - Dashboard Header
+    // MARK: - Header
 
     private var dashboardHeader: some View {
         DashboardHeader()
             .scaleEffect(
-                reduceMotion
-                    ? 1
-                    : 1 - headerCollapse * 0.08,
+                reduceMotion ? 1 : 1 - headerCollapse * 0.08,
                 anchor: .top
             )
-            .opacity(
-                Double(1 - headerCollapse)
-            )
+            .opacity(Double(1 - headerCollapse))
             .offset(
-                y: reduceMotion
-                    ? 0
-                    : -headerCollapse * 12
+                y: reduceMotion ? 0 : -headerCollapse * 12
             )
             .allowsHitTesting(headerCollapse < 0.9)
             .accessibilityHidden(headerCollapse >= 0.9)
     }
-
-    // MARK: - Progress Header
 
     private var progressHeader: some View {
         ProgressHeaderView(
@@ -143,24 +132,18 @@ struct ContentView: View {
             reloadID: progressReloadID
         )
         .scaleEffect(
-            reduceMotion
-                ? 1
-                : 1 - progressCollapse * 0.35,
+            reduceMotion ? 1 : 1 - progressCollapse * 0.35,
             anchor: .top
         )
-        .opacity(
-            Double(1 - progressCollapse)
-        )
+        .opacity(Double(1 - progressCollapse))
         .offset(
-            y: reduceMotion
-                ? 0
-                : -progressCollapse * 24
+            y: reduceMotion ? 0 : -progressCollapse * 24
         )
         .accessibilityHidden(progressCollapse >= 0.95)
         .padding(.bottom, 28)
     }
 
-    // MARK: - Date Strip
+    // MARK: - Date And Tasks
 
     private var dateStrip: some View {
         DateStripView(
@@ -170,19 +153,15 @@ struct ContentView: View {
         .padding(.bottom, 28)
     }
 
-    // MARK: - Tasks Header
-
     private var tasksHeader: some View {
         TasksHeader(
             selectedDate: selectedDate,
-            isToday: isToday(selectedDate),
+            isToday: calendar.isDateInToday(selectedDate),
             onAddTask: {
                 showAddTask = true
             }
         )
     }
-
-    // MARK: - Task List
 
     private var taskList: some View {
         LazyVStack(spacing: 12) {
@@ -198,6 +177,7 @@ struct ContentView: View {
                     )
                 }
                 .buttonStyle(.plain)
+                .modifier(TaskStatusMenu(task: task))
                 .opacity(
                     appearedTaskIDs.contains(task.id) ? 1 : 0
                 )
@@ -215,13 +195,11 @@ struct ContentView: View {
         .padding(.horizontal, 16)
     }
 
-    // MARK: - Empty State
-
     @ViewBuilder
     private var emptyState: some View {
         if selectedDayTasks.isEmpty {
             EmptyTaskView(
-                isToday: isToday(selectedDate)
+                isToday: calendar.isDateInToday(selectedDate)
             )
         }
     }
@@ -249,10 +227,15 @@ struct ContentView: View {
     // MARK: - Task Actions
 
     private func toggleTask(_ task: TaskItem) {
-        task.isCompleted.toggle()
-
-        NotificationManager.shared
-            .scheduleNotifications(for: task)
+        do {
+            try withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.25)) {
+                try TaskStatusStore.set(task.isCompleted ? .pending : .completed,
+                                        for: task, in: modelContext)
+            }
+        } catch {
+            statusErrorMessage = error.localizedDescription
+            showStatusError = true
+        }
     }
 
     private func animateTaskAppearance(_ task: TaskItem) {
@@ -270,11 +253,5 @@ struct ContentView: View {
         ) {
             _ = appearedTaskIDs.insert(task.id)
         }
-    }
-
-    // MARK: - Helpers
-
-    private func isToday(_ date: Date) -> Bool {
-        calendar.isDateInToday(date)
     }
 }

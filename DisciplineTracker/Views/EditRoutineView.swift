@@ -71,7 +71,7 @@ struct EditRoutineView: View {
     // MARK: - Body
 
     var body: some View {
-        Form {
+        AppForm {
             routineSection
             weekdaysSection
             scheduleSection
@@ -124,7 +124,7 @@ struct EditRoutineView: View {
             Text("Routine")
         } footer: {
             Text(
-                "Changes apply from the date below. Completed tasks, past tasks and individually edited tasks are preserved."
+                "Changes apply from the date below. Completed or skipped tasks, past tasks and individually edited tasks are preserved."
             )
         }
     }
@@ -368,7 +368,7 @@ struct EditRoutineView: View {
                 task.category != routine.category ||
                 task.notes != routine.notes
 
-            if task.isCompleted ||
+            if !task.isPending ||
                 task.startTime <= now ||
                 individuallyEdited {
                 plan.preservedCount += 1
@@ -411,7 +411,8 @@ struct EditRoutineView: View {
 
             // If this date belonged to the old rule but its task
             // is missing, preserve the individual deletion.
-            guard !oldRuleIncludes(day) else {
+            guard !oldRuleIncludes(day),
+                  !(routine.excludedDayKeys ?? []).contains(JournalEntry.key(for: day)) else {
                 continue
             }
 

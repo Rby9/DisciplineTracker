@@ -27,6 +27,7 @@ class TaskSeries {
 
     // Calendar weekdays: Sunday = 1, Monday = 2, ...
     var weekdays: [Int]
+    var excludedDayKeys: [String]? = nil
 
     // MARK: - Initialization
 

@@ -1,3 +1,4 @@
+
 import SwiftUI
 import SwiftData
 import Foundation
@@ -6,30 +7,36 @@ struct WeeklyView: View {
 
     // MARK: - Environment
 
+    @Environment(\.modelContext) private var modelContext
+    @State private var showStatusError = false
+    @State private var statusErrorMessage = ""
+
     @Environment(\.accessibilityReduceMotion)
     private var reduceMotion
 
     // MARK: - Properties
 
+    @Binding var selectedDate: Date
+
     @Query private var tasks: [TaskItem]
 
-    @State private var selectedDate = Date()
     @State private var showAddTask = false
     @State private var showCalendar = false
     @State private var calendarDate = Date()
     @State private var selectedFilter: AgendaFilter = .all
     @State private var showCompleted = false
+    @State private var showSkipped = false
+    @State private var showInsights = false
 
     private let accent = Color(hex: "8B7CFF")
     private let surface = Color(hex: "161426")
     private let border = Color(hex: "2E2A4D")
 
-    // MARK: - Filters
-
     private enum AgendaFilter: String, CaseIterable {
         case all = "All"
         case pending = "Pending"
         case completed = "Completed"
+        case skipped = "Skipped"
     }
 
     // MARK: - Calendar
@@ -44,11 +51,10 @@ struct WeeklyView: View {
     private var weekStart: Date {
         let day = calendar.startOfDay(for: selectedDate)
         let weekday = calendar.component(.weekday, from: day)
-        let daysSinceMonday = (weekday + 5) % 7
 
         return calendar.date(
             byAdding: .day,
-            value: -daysSinceMonday,
+            value: -((weekday + 5) % 7),
             to: day
         ) ?? day
     }
@@ -62,10 +68,10 @@ struct WeeklyView: View {
     }
 
     private var weekDates: [Date] {
-        (0..<7).compactMap { offset in
+        (0..<7).compactMap {
             calendar.date(
                 byAdding: .day,
-                value: offset,
+                value: $0,
                 to: weekStart
             )
         }
@@ -84,23 +90,19 @@ struct WeeklyView: View {
         formatter.dateStyle = .medium
         formatter.timeStyle = .none
 
-        return formatter.string(
-            from: weekStart,
-            to: lastDay
-        )
+        return formatter.string(from: weekStart, to: lastDay)
     }
 
     private var isCurrentWeek: Bool {
-        let today = Date()
-        return today >= weekStart && today < weekEnd
+        let now = Date()
+        return now >= weekStart && now < weekEnd
     }
 
-    // MARK: - Task Properties
+    // MARK: - Tasks
 
     private var weekTasks: [TaskItem] {
         tasks.filter {
-            $0.startTime >= weekStart &&
-            $0.startTime < weekEnd
+            $0.startTime >= weekStart && $0.startTime < weekEnd
         }
     }
 
@@ -109,9 +111,7 @@ struct WeeklyView: View {
     }
 
     private var weeklyProgress: Double {
-        guard !weekTasks.isEmpty else {
-            return 0
-        }
+        guard !weekTasks.isEmpty else { return 0 }
 
         return Double(completedWeekTasks)
             / Double(weekTasks.count)
@@ -122,11 +122,15 @@ struct WeeklyView: View {
     }
 
     private var pendingTasks: [TaskItem] {
-        selectedDayTasks.filter { !$0.isCompleted }
+        selectedDayTasks.filter { $0.isPending }
     }
 
     private var completedTasks: [TaskItem] {
         selectedDayTasks.filter { $0.isCompleted }
+    }
+
+    private var skippedTasks: [TaskItem] {
+        selectedDayTasks.filter { $0.isSkipped }
     }
 
     // MARK: - Body
@@ -153,8 +157,14 @@ struct WeeklyView: View {
                 }
             }
             .toolbar(.hidden, for: .navigationBar)
+        .alert("Could not update task", isPresented: $showStatusError) {
+            Button("OK", role: .cancel) {}
+        } message: { Text(statusErrorMessage) }
             .sheet(isPresented: $showAddTask) {
                 AddTaskView(selectedDate: selectedDate)
+            }
+            .sheet(isPresented: $showInsights) {
+                WeeklyInsightsView(initialDate: selectedDate)
             }
             .sheet(isPresented: $showCalendar) {
                 calendarSheet
@@ -162,7 +172,7 @@ struct WeeklyView: View {
         }
     }
 
-    // MARK: - Page Header
+    // MARK: - Header
 
     private var pageHeader: some View {
         HStack {
@@ -188,6 +198,17 @@ struct WeeklyView: View {
             }
 
             Button {
+                showInsights = true
+            } label: {
+                Image(systemName: "chart.bar.xaxis")
+                    .foregroundStyle(accent)
+                    .frame(width: 44, height: 44)
+                    .background(surface, in: RoundedRectangle(cornerRadius: 14))
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("Weekly insights")
+
+            Button {
                 calendarDate = selectedDate
                 showCalendar = true
             } label: {
@@ -196,16 +217,12 @@ struct WeeklyView: View {
                     .foregroundStyle(accent)
                     .frame(width: 44, height: 44)
                     .background(surface)
-                    .clipShape(
-                        RoundedRectangle(cornerRadius: 14)
-                    )
+                    .clipShape(RoundedRectangle(cornerRadius: 14))
             }
             .buttonStyle(.plain)
             .accessibilityLabel("Choose a date")
         }
     }
-
-    // MARK: - Week Navigation
 
     private var weekNavigation: some View {
         HStack(spacing: 8) {
@@ -242,15 +259,13 @@ struct WeeklyView: View {
                 .foregroundStyle(.white.opacity(0.8))
                 .frame(width: 44, height: 44)
                 .background(surface)
-                .clipShape(
-                    RoundedRectangle(cornerRadius: 13)
-                )
+                .clipShape(RoundedRectangle(cornerRadius: 13))
         }
         .buttonStyle(.plain)
         .accessibilityLabel(label)
     }
 
-    // MARK: - Weekly Summary
+    // MARK: - Progress
 
     private var weeklySummary: some View {
         VStack(spacing: 9) {
@@ -277,7 +292,7 @@ struct WeeklyView: View {
         }
     }
 
-    // MARK: - Week Day Strip
+    // MARK: - Days
 
     private var weekDayStrip: some View {
         HStack(spacing: 5) {
@@ -300,13 +315,10 @@ struct WeeklyView: View {
             selectDay(date)
         } label: {
             VStack(spacing: 6) {
-                Text(
-                    date,
-                    format: .dateTime.weekday(.abbreviated)
-                )
-                .font(.system(size: 10, weight: .semibold))
-                .lineLimit(1)
-                .minimumScaleFactor(0.7)
+                Text(date, format: .dateTime.weekday(.abbreviated))
+                    .font(.system(size: 10, weight: .semibold))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
 
                 Text(date, format: .dateTime.day())
                     .font(.system(size: 17, weight: .bold))
@@ -327,15 +339,11 @@ struct WeeklyView: View {
             .frame(maxWidth: .infinity)
             .frame(height: 76)
             .background(selected ? accent : surface)
-            .clipShape(
-                RoundedRectangle(cornerRadius: 14)
-            )
+            .clipShape(RoundedRectangle(cornerRadius: 14))
             .overlay {
                 RoundedRectangle(cornerRadius: 14)
                     .stroke(
-                        today
-                            ? Color(hex: "A99EFF")
-                            : Color.clear,
+                        today ? Color(hex: "A99EFF") : Color.clear,
                         lineWidth: 1.5
                     )
             }
@@ -347,9 +355,7 @@ struct WeeklyView: View {
         .accessibilityValue(
             "\(completed) of \(dayTasks.count) completed"
         )
-        .accessibilityAddTraits(
-            selected ? .isSelected : []
-        )
+        .accessibilityAddTraits(selected ? .isSelected : [])
     }
 
     // MARK: - Agenda Header
@@ -390,8 +396,6 @@ struct WeeklyView: View {
             .accessibilityLabel("Add task for selected day")
         }
     }
-
-    // MARK: - Filter Bar
 
     private var filterBar: some View {
         HStack(spacing: 4) {
@@ -447,10 +451,18 @@ struct WeeklyView: View {
                     emptyMessage(
                         icon: "checkmark.circle",
                         title: "Nothing pending",
-                        subtitle: "All tasks for this day are completed."
+                        subtitle: "Check Completed or Skipped for the other tasks."
                     )
                 } else {
                     agendaRows(pendingTasks)
+                }
+
+            case .skipped:
+                if skippedTasks.isEmpty {
+                    emptyMessage(icon: "forward.end.circle", title: "No skipped tasks",
+                                 subtitle: "You can skip a task from its details.")
+                } else {
+                    agendaRows(skippedTasks)
                 }
 
             case .completed:
@@ -471,7 +483,7 @@ struct WeeklyView: View {
         VStack(spacing: 18) {
             if pendingTasks.isEmpty {
                 Label(
-                    "All tasks completed",
+                    skippedTasks.isEmpty ? "All tasks completed" : "No pending tasks",
                     systemImage: "checkmark.circle.fill"
                 )
                 .font(.system(size: 13, weight: .medium))
@@ -481,10 +493,19 @@ struct WeeklyView: View {
                 agendaRows(pendingTasks)
             }
 
+            if !skippedTasks.isEmpty {
+                DisclosureGroup(isExpanded: $showSkipped) {
+                    agendaRows(skippedTasks).padding(.top, 12)
+                } label: {
+                    Text("Skipped · \(skippedTasks.count)")
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundStyle(.orange)
+                }
+                .tint(.orange)
+            }
+
             if !completedTasks.isEmpty {
-                DisclosureGroup(
-                    isExpanded: $showCompleted
-                ) {
+                DisclosureGroup(isExpanded: $showCompleted) {
                     agendaRows(completedTasks)
                         .padding(.top, 12)
                 } label: {
@@ -512,8 +533,6 @@ struct WeeklyView: View {
         }
     }
 
-    // MARK: - Agenda Row
-
     private func agendaRow(_ task: TaskItem) -> some View {
         HStack(spacing: 10) {
             NavigationLink {
@@ -538,9 +557,7 @@ struct WeeklyView: View {
 
                     VStack(alignment: .leading, spacing: 6) {
                         Text(task.title)
-                            .font(
-                                .system(size: 15, weight: .semibold)
-                            )
+                            .font(.system(size: 15, weight: .semibold))
                             .foregroundStyle(
                                 task.isCompleted
                                     ? .white.opacity(0.5)
@@ -551,17 +568,17 @@ struct WeeklyView: View {
 
                         HStack(spacing: 8) {
                             Text(task.category.rawValue)
-                                .foregroundStyle(
-                                    task.category.color
-                                )
+                                .foregroundStyle(task.category.color)
+
+                            if task.isSkipped {
+                                Text("Skipped").foregroundStyle(.orange)
+                            }
 
                             if !task.notes.trimmingCharacters(
                                 in: .whitespacesAndNewlines
                             ).isEmpty {
                                 Image(systemName: "note.text")
-                                    .foregroundStyle(
-                                        .white.opacity(0.4)
-                                    )
+                                    .foregroundStyle(.white.opacity(0.4))
                             }
                         }
                         .font(.system(size: 11, weight: .medium))
@@ -578,20 +595,13 @@ struct WeeklyView: View {
                 toggleTask(task)
             } label: {
                 Image(
-                    systemName: task.isCompleted
-                        ? "checkmark.circle.fill"
-                        : "circle"
+                    systemName: task.status.symbol
                 )
                 .font(.system(size: 25))
                 .foregroundStyle(
-                    task.isCompleted
-                        ? accent
-                        : .white.opacity(0.35)
+                    task.status.color
                 )
-                .symbolEffect(
-                    .bounce,
-                    value: task.isCompleted
-                )
+                .symbolEffect(.bounce, value: task.status)
                 .frame(width: 44, height: 44)
                 .contentShape(Rectangle())
             }
@@ -603,9 +613,8 @@ struct WeeklyView: View {
             )
         }
         .padding(.vertical, 13)
+        .modifier(TaskStatusMenu(task: task))
     }
-
-    // MARK: - Empty Message
 
     private func emptyMessage(
         icon: String,
@@ -666,14 +675,11 @@ struct WeeklyView: View {
         .preferredColorScheme(.dark)
     }
 
-    // MARK: - Helpers
+    // MARK: - Helpers And Actions
 
     private func tasksForDay(_ date: Date) -> [TaskItem] {
         tasks.filter {
-            calendar.isDate(
-                $0.startTime,
-                inSameDayAs: date
-            )
+            calendar.isDate($0.startTime, inSameDayAs: date)
         }
         .sorted {
             if $0.startTime == $1.startTime {
@@ -684,15 +690,14 @@ struct WeeklyView: View {
         }
     }
 
-    // MARK: - Actions
-
     private func selectDay(_ date: Date) {
         selectedDate = date
         showCompleted = false
+        showSkipped = false
     }
 
     private func moveWeek(by direction: Int) {
-        guard let newDate = calendar.date(
+        guard let date = calendar.date(
             byAdding: .day,
             value: direction * 7,
             to: selectedDate
@@ -700,19 +705,18 @@ struct WeeklyView: View {
             return
         }
 
-        selectDay(newDate)
+        selectDay(date)
     }
 
     private func toggleTask(_ task: TaskItem) {
-        withAnimation(
-            reduceMotion
-                ? nil
-                : .easeInOut(duration: 0.25)
-        ) {
-            task.isCompleted.toggle()
+        do {
+            try withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.25)) {
+                try TaskStatusStore.set(task.isCompleted ? .pending : .completed,
+                                        for: task, in: modelContext)
+            }
+        } catch {
+            statusErrorMessage = error.localizedDescription
+            showStatusError = true
         }
-
-        NotificationManager.shared
-            .scheduleNotifications(for: task)
     }
 }

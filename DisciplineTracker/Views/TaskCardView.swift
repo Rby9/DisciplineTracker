@@ -19,6 +19,7 @@ struct TaskCardView: View {
         case upcoming
         case overdue
         case completed
+        case skipped
     }
 
     // MARK: - Body
@@ -83,22 +84,20 @@ struct TaskCardView: View {
             onToggle()
         } label: {
             Image(
-                systemName: task.isCompleted
-                    ? "checkmark.circle.fill"
-                    : "circle"
+                systemName: task.status.symbol
             )
             .foregroundStyle(
-                task.isCompleted
-                    ? Color(hex: "8B7CFF")
-                    : .white.opacity(0.6)
+                task.status.color
             )
             .font(.system(size: 26))
             .symbolEffect(
                 .bounce,
-                value: task.isCompleted
+                value: task.status
             )
         }
         .buttonStyle(.plain)
+        .frame(minWidth: 44, minHeight: 44)
+        .accessibilityLabel(task.isCompleted ? "Mark \(task.title) as pending" : "Complete \(task.title)")
     }
 
     // MARK: - Title Section
@@ -209,6 +208,7 @@ struct TaskCardView: View {
     // MARK: - Status
 
     private func statusKind(at date: Date) -> StatusKind {
+        if task.isSkipped { return .skipped }
         if task.isCompleted {
             return .completed
         }
@@ -221,6 +221,7 @@ struct TaskCardView: View {
     }
 
     private func statusText(at date: Date) -> String {
+        if task.isSkipped { return "Skipped" }
         if task.isCompleted {
             return "Completed"
         }
@@ -240,6 +241,7 @@ struct TaskCardView: View {
     }
 
     private func statusColor(at date: Date) -> Color {
+        if task.isSkipped { return .orange }
         if task.isCompleted {
             return task.category.color
         }

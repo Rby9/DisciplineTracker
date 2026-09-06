@@ -14,6 +14,21 @@ class TaskItem {
     var isCompleted: Bool
     var notes: String
 
+    // Optional storage lets existing tasks migrate as Pending/Completed.
+    var skipped: Bool? = nil
+
+    var status: TaskStatus {
+        isCompleted ? .completed : (skipped == true ? .skipped : .pending)
+    }
+
+    var isSkipped: Bool { status == .skipped }
+    var isPending: Bool { status == .pending }
+
+    func setStatus(_ newStatus: TaskStatus) {
+        isCompleted = newStatus == .completed
+        skipped = newStatus == .skipped
+    }
+
     // MARK: - Recurrence
 
     var seriesID: UUID? = nil
