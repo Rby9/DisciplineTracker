@@ -1,6 +1,8 @@
 import Foundation
+import SwiftData
 import UserNotifications
 
+@MainActor
 final class NotificationManager {
 
     // MARK: - Singleton
@@ -9,167 +11,275 @@ final class NotificationManager {
 
     private init() {}
 
+    // MARK: - Properties
+
+    private var modelContext: ModelContext?
+    private var excludedTaskIDs: Set<UUID> = []
+
+    private var queuedRequests: [UNNotificationRequest]?
+    private var isProcessingQueue = false
+
+    private let notificationLimit = 64
+
+    // MARK: - Configuration
+
+    func configure(with context: ModelContext) {
+        modelContext = context
+    }
 
     // MARK: - Permission
 
     func requestPermission() {
-        UNUserNotificationCenter.current()
-            .requestAuthorization(
-                options: [
-                    .alert,
-                    .sound,
-                    .badge
-                ]
-            ) { granted, error in
-                if granted {
-                    print("Notification permission granted")
-                } else if let error = error {
-                    print(
-                        "Notification permission error: \(error.localizedDescription)"
+        Task {
+            do {
+                let granted = try await UNUserNotificationCenter
+                    .current()
+                    .requestAuthorization(
+                        options: [.alert, .sound, .badge]
                     )
+
+                if granted {
+                    refreshNotifications()
                 }
+            } catch {
+                print(
+                    "Notification permission error: \(error.localizedDescription)"
+                )
             }
+        }
     }
 
-
-    // MARK: - Scheduling
+    // MARK: - Existing Task Actions
 
     func scheduleNotifications(for task: TaskItem) {
-        cancelNotifications(for: task)
-
-        guard !task.isCompleted else {
-            return
-        }
-
-        scheduleReminder(for: task)
-        scheduleExactTime(for: task)
-        scheduleOverdue(for: task)
+        excludedTaskIDs.remove(task.id)
+        refreshNotifications()
     }
-
-
-    // MARK: - Reminder Notification
-
-    private func scheduleReminder(for task: TaskItem) {
-        let reminderTime = Calendar.current.date(
-            byAdding: .minute,
-            value: -10,
-            to: task.startTime
-        ) ?? task.startTime
-
-        guard reminderTime > Date() else {
-            return
-        }
-
-        let content = UNMutableNotificationContent()
-        content.title = "Reminder"
-        content.body = "\(task.title) in 10 minutes"
-        content.sound = .default
-
-        let triggerDate = Calendar.current.dateComponents(
-            [.year, .month, .day, .hour, .minute, .second],
-            from: reminderTime
-        )
-
-        let trigger = UNCalendarNotificationTrigger(
-            dateMatching: triggerDate,
-            repeats: false
-        )
-
-        let request = UNNotificationRequest(
-            identifier: "\(task.id)-reminder",
-            content: content,
-            trigger: trigger
-        )
-
-        UNUserNotificationCenter.current()
-            .add(request)
-    }
-
-
-    // MARK: - Exact Time Notification
-
-    private func scheduleExactTime(for task: TaskItem) {
-        guard task.startTime > Date() else {
-            return
-        }
-
-        let content = UNMutableNotificationContent()
-        content.title = "Time for: \(task.title)"
-        content.body = "It's time!"
-        content.sound = .default
-
-        let triggerDate = Calendar.current.dateComponents(
-            [.year, .month, .day, .hour, .minute, .second],
-            from: task.startTime
-        )
-
-        let trigger = UNCalendarNotificationTrigger(
-            dateMatching: triggerDate,
-            repeats: false
-        )
-
-        let request = UNNotificationRequest(
-            identifier: "\(task.id)-exact",
-            content: content,
-            trigger: trigger
-        )
-
-        UNUserNotificationCenter.current()
-            .add(request)
-    }
-
-
-    // MARK: - Overdue Notification
-
-    private func scheduleOverdue(for task: TaskItem) {
-        let overdueTime = Calendar.current.date(
-            byAdding: .minute,
-            value: 15,
-            to: task.startTime
-        ) ?? task.startTime
-
-        guard overdueTime > Date() else {
-            return
-        }
-
-        let content = UNMutableNotificationContent()
-        content.title = "Overdue"
-        content.body = "You still haven't completed: \(task.title)"
-        content.sound = .default
-
-        let triggerDate = Calendar.current.dateComponents(
-            [.year, .month, .day, .hour, .minute, .second],
-            from: overdueTime
-        )
-
-        let trigger = UNCalendarNotificationTrigger(
-            dateMatching: triggerDate,
-            repeats: false
-        )
-
-        let request = UNNotificationRequest(
-            identifier: "\(task.id)-overdue",
-            content: content,
-            trigger: trigger
-        )
-
-        UNUserNotificationCenter.current()
-            .add(request)
-    }
-
-
-    // MARK: - Cancellation
 
     func cancelNotifications(for task: TaskItem) {
-        let identifiers = [
-            "\(task.id)-reminder",
-            "\(task.id)-exact",
-            "\(task.id)-overdue"
-        ]
+        excludedTaskIDs.insert(task.id)
 
         UNUserNotificationCenter.current()
             .removePendingNotificationRequests(
-                withIdentifiers: identifiers
+                withIdentifiers: identifiers(for: task.id)
             )
+
+        refreshNotifications()
+    }
+
+    // MARK: - Refresh
+
+    func refreshNotifications() {
+        guard let modelContext else {
+            return
+        }
+
+        do {
+            let descriptor = FetchDescriptor<TaskItem>()
+            let tasks = try modelContext.fetch(descriptor)
+
+            let existingIDs = Set(tasks.map(\.id))
+            excludedTaskIDs.formIntersection(existingIDs)
+
+            let now = Date()
+
+            var events: [
+                (date: Date, request: UNNotificationRequest)
+            ] = []
+
+            for task in tasks {
+                guard !task.isCompleted,
+                      !excludedTaskIDs.contains(task.id) else {
+                    continue
+                }
+
+                let reminderDate = Calendar.current.date(
+                    byAdding: .minute,
+                    value: -10,
+                    to: task.startTime
+                ) ?? task.startTime
+
+                let overdueDate = Calendar.current.date(
+                    byAdding: .minute,
+                    value: 15,
+                    to: task.startTime
+                ) ?? task.startTime
+
+                if reminderDate > now {
+                    events.append((
+                        date: reminderDate,
+                        request: makeRequest(
+                            taskID: task.id,
+                            suffix: "reminder",
+                            title: "Reminder",
+                            body: "\(task.title) in 10 minutes",
+                            date: reminderDate
+                        )
+                    ))
+                }
+
+                if task.startTime > now {
+                    events.append((
+                        date: task.startTime,
+                        request: makeRequest(
+                            taskID: task.id,
+                            suffix: "exact",
+                            title: "Time for: \(task.title)",
+                            body: "It's time!",
+                            date: task.startTime
+                        )
+                    ))
+                }
+
+                if overdueDate > now {
+                    events.append((
+                        date: overdueDate,
+                        request: makeRequest(
+                            taskID: task.id,
+                            suffix: "overdue",
+                            title: "Overdue",
+                            body: "You still haven't completed: \(task.title)",
+                            date: overdueDate
+                        )
+                    ))
+                }
+            }
+
+            events.sort {
+                if $0.date == $1.date {
+                    return $0.request.identifier
+                        < $1.request.identifier
+                }
+
+                return $0.date < $1.date
+            }
+
+            queuedRequests = events
+                .prefix(notificationLimit)
+                .map { $0.request }
+
+            startQueueIfNeeded()
+
+        } catch {
+            print(
+                "Could not load tasks for notifications: \(error.localizedDescription)"
+            )
+        }
+    }
+
+    // MARK: - Request Creation
+
+    private func makeRequest(
+        taskID: UUID,
+        suffix: String,
+        title: String,
+        body: String,
+        date: Date
+    ) -> UNNotificationRequest {
+        let content = UNMutableNotificationContent()
+        content.title = title
+        content.body = body
+        content.sound = .default
+
+        let components = Calendar.current.dateComponents(
+            [.year, .month, .day, .hour, .minute, .second],
+            from: date
+        )
+
+        let trigger = UNCalendarNotificationTrigger(
+            dateMatching: components,
+            repeats: false
+        )
+
+        return UNNotificationRequest(
+            identifier: "\(taskID)-\(suffix)",
+            content: content,
+            trigger: trigger
+        )
+    }
+
+    // MARK: - Serial Scheduling
+
+    private func startQueueIfNeeded() {
+        guard !isProcessingQueue else {
+            return
+        }
+
+        isProcessingQueue = true
+
+        Task {
+            await processQueue()
+        }
+    }
+
+    private func processQueue() async {
+        let center = UNUserNotificationCenter.current()
+
+        while let requests = queuedRequests {
+            queuedRequests = nil
+
+            let pending = await center.pendingNotificationRequests()
+
+            let managed = pending.filter {
+                isTaskNotification($0.identifier)
+            }
+
+            let otherCount = pending.count - managed.count
+            let availableSlots = max(
+                0,
+                notificationLimit - otherCount
+            )
+
+            center.removePendingNotificationRequests(
+                withIdentifiers: managed.map(\.identifier)
+            )
+
+            for request in requests.prefix(availableSlots) {
+                guard let trigger = request.trigger
+                    as? UNCalendarNotificationTrigger,
+                      let nextDate = trigger.nextTriggerDate(),
+                      nextDate > Date() else {
+                    continue
+                }
+
+                do {
+                    try await center.add(request)
+                } catch {
+                    print(
+                        "Notification scheduling error: \(error.localizedDescription)"
+                    )
+                }
+            }
+        }
+
+        isProcessingQueue = false
+    }
+
+    // MARK: - Helpers
+
+    private func identifiers(for taskID: UUID) -> [String] {
+        [
+            "\(taskID)-reminder",
+            "\(taskID)-exact",
+            "\(taskID)-overdue"
+        ]
+    }
+
+    private func isTaskNotification(_ identifier: String) -> Bool {
+        for suffix in ["-reminder", "-exact", "-overdue"] {
+            guard identifier.hasSuffix(suffix) else {
+                continue
+            }
+
+            let prefix = String(
+                identifier.dropLast(suffix.count)
+            )
+
+            if UUID(uuidString: prefix) != nil {
+                return true
+            }
+        }
+
+        return false
     }
 }
