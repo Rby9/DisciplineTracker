@@ -9,6 +9,7 @@ struct WeeklyView: View {
 
     @Environment(\.modelContext) private var modelContext
     @State private var showStatusError = false
+    @State private var dayDirection: CGFloat = 1
     @State private var statusErrorMessage = ""
 
     @Environment(\.accessibilityReduceMotion)
@@ -147,9 +148,7 @@ struct WeeklyView: View {
                         weekNavigation
                         weeklySummary
                         weekDayStrip
-                        agendaHeader
-                        filterBar
-                        agendaContent
+                        animatedAgenda
                     }
                     .padding(.horizontal, 18)
                     .padding(.top, 12)
@@ -358,6 +357,51 @@ struct WeeklyView: View {
         .accessibilityAddTraits(selected ? .isSelected : [])
     }
 
+    // MARK: - Day Animation
+
+    private var selectedDay: Date {
+        calendar.startOfDay(for: selectedDate)
+    }
+
+    private var dayAnimation: Animation {
+        .easeInOut(
+            duration: reduceMotion ? 0.15 : 0.28
+        )
+    }
+
+    private var dayTransition: AnyTransition {
+        if reduceMotion {
+            return .opacity
+        }
+
+        return .asymmetric(
+            insertion: .opacity.combined(
+                with: .offset(x: dayDirection * 24)
+            ),
+            removal: .opacity.combined(
+                with: .offset(x: dayDirection * -24)
+            )
+        )
+    }
+
+    private var animatedAgenda: some View {
+        ZStack(alignment: .top) {
+            VStack(spacing: 20) {
+                agendaHeader
+                filterBar
+                agendaContent
+            }
+            .frame(maxWidth: .infinity)
+            .id(selectedDay)
+            .transition(dayTransition)
+        }
+        .frame(maxWidth: .infinity)
+        .animation(
+            dayAnimation,
+            value: selectedDay
+        )
+    }
+    
     // MARK: - Agenda Header
 
     private var agendaHeader: some View {
@@ -567,7 +611,7 @@ struct WeeklyView: View {
                             .lineLimit(2)
 
                         HStack(spacing: 8) {
-                            Text(task.category.rawValue)
+                            Text(LocalizedStringKey(task.category.rawValue))
                                 .foregroundStyle(task.category.color)
 
                             if task.isSkipped {
@@ -691,11 +735,18 @@ struct WeeklyView: View {
     }
 
     private func selectDay(_ date: Date) {
+        let newDay = calendar.startOfDay(for: date)
+
+        guard newDay != selectedDay else {
+            return
+        }
+
+        dayDirection = newDay > selectedDay ? 1 : -1
+
         selectedDate = date
         showCompleted = false
         showSkipped = false
     }
-
     private func moveWeek(by direction: Int) {
         guard let date = calendar.date(
             byAdding: .day,

@@ -66,20 +66,41 @@ enum TaskCategory: String, CaseIterable, Codable {
     case food = "Food"
     case work = "Work"
     case sleep = "Sleep"
+    case medication = "Medication"
+    
+    case study = "Study"
+    case personal = "Personal"
+    case household = "Household"
     case other = "Other"
-
+    
     var color: Color {
-        switch self {
-        case .gym:
-            return .red
-        case .food:
-            return .orange
-        case .work:
-            return .blue
-        case .sleep:
-            return .purple
-        case .other:
-            return .gray
+            switch self {
+            case .gym:
+                return .red
+
+            case .food:
+                return .orange
+
+            case .work:
+                return .blue
+
+            case .sleep:
+                return .purple
+
+            case .medication:
+                return .teal
+
+            case .study:
+                return .indigo
+
+            case .personal:
+                return .pink
+
+            case .household:
+                return .green
+                
+            case .other:
+                return .gray
         }
     }
 }

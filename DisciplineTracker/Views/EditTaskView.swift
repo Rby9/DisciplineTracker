@@ -56,7 +56,7 @@ struct EditTaskView: View {
 
             Picker("Category", selection: $category) {
                 ForEach(TaskCategory.allCases, id: \.self) { category in
-                    Text(category.rawValue)
+                    Text(LocalizedStringKey(category.rawValue))
                         .tag(category)
                 }
             }

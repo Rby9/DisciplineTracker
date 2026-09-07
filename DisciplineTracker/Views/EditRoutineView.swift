@@ -118,7 +118,7 @@ struct EditRoutineView: View {
             Text(routine.title)
                 .font(.headline)
 
-            Text(routine.category.rawValue)
+            Text(LocalizedStringKey(routine.category.rawValue))
                 .foregroundStyle(routine.category.color)
         } header: {
             Text("Routine")

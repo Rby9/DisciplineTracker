@@ -133,7 +133,7 @@ struct TaskDetailView: View {
             Text(task.title)
                 .font(.headline)
 
-            Text(task.category.rawValue)
+            Text(LocalizedStringKey(task.category.rawValue))
                 .foregroundStyle(task.category.color)
 
             LabeledContent("Date") {

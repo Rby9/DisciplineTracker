@@ -188,7 +188,7 @@ struct TaskCardView: View {
                     .white.opacity(0.65)
                 )
 
-            Text(task.category.rawValue)
+            Text(LocalizedStringKey(task.category.rawValue))
                 .font(
                     .system(
                         size: 12,
