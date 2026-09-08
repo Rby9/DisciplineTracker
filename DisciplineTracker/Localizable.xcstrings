@@ -1,1709 +1,2627 @@
 {
-  "sourceLanguage" : "en",
-  "strings" : {
-    "—" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "—"
+  "sourceLanguage": "en",
+  "strings": {
+    "—": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "—"
           }
         }
       }
     },
-    "%@ · %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ · %2$@"
-          }
-        },
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$@ · %2$@"
-          }
-        }
-      }
-    },
-    "%@ %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ %2$@"
+    "%@ · %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@ · %2$@"
           }
         },
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$@ %2$@"
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ · %2$@"
           }
         }
       }
     },
-    "%lld" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld"
-          }
-        }
-      }
-    },
-    "%lld completed, %lld skipped, %lld pending" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$lld completed, %2$lld skipped, %3$lld pending"
+    "%@ %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@ %2$@"
           }
         },
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Finalizate: %1$lld, omise: %2$lld, de făcut: %3$lld"
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ %2$@"
           }
         }
       }
     },
-    "%lld of %lld completed" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$lld of %2$lld completed"
-          }
-        },
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Finalizate: %1$lld din %2$lld"
+    "%lld": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld"
           }
         }
       }
     },
-    "%lld percent" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld la sută"
-          }
-        }
-      }
-    },
-    "%lld tasks · %lld pending" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$lld tasks · %2$lld pending"
+    "%lld completed, %lld skipped, %lld pending": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$lld completed, %2$lld skipped, %3$lld pending"
           }
         },
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Activități: %1$lld · De făcut: %2$lld"
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finalizate: %1$lld, omise: %2$lld, de făcut: %3$lld"
           }
         }
       }
     },
-    "%lld/%lld" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$lld/%2$lld"
-          }
-        },
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$lld/%2$lld"
-          }
-        }
-      }
-    },
-    "%lld/%lld completed" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$lld/%2$lld completed"
+    "%lld of %lld completed": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$lld of %2$lld completed"
           }
         },
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Finalizate: %1$lld/%2$lld"
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finalizate: %1$lld din %2$lld"
           }
         }
       }
     },
-    "%lld%%" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld%%"
+    "%lld percent": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld la sută"
           }
         }
       }
     },
-    "1 month" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "1 lună"
+    "%lld tasks · %lld pending": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$lld tasks · %2$lld pending"
           }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activități: %1$lld · De făcut: %2$lld"
+          }
+        }
+      }
+    },
+    "%lld/%lld": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$lld/%2$lld"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld/%2$lld"
+          }
+        }
+      }
+    },
+    "%lld/%lld completed": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$lld/%2$lld completed"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finalizate: %1$lld/%2$lld"
+          }
+        }
+      }
+    },
+    "%lld%%": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld%%"
+          }
+        }
+      }
+    },
+    "1 month": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 lună"
+          }
+        }
+      }
+    },
+    "3 months": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "3 luni"
+          }
+        }
+      }
+    },
+    "4 months": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "4 luni"
+          }
+        }
+      }
+    },
+    "6 months": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "6 luni"
+          }
+        }
+      }
+    },
+    "Add a task and choose a repeat option.": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adaugă o activitate și alege cum se repetă."
+          }
+        }
+      }
+    },
+    "Add notes...": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adaugă notițe..."
+          }
+        }
+      }
+    },
+    "Add Routine": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adaugă o rutină"
+          }
+        }
+      }
+    },
+    "Add Task": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adaugă o activitate"
+          }
+        }
+      }
+    },
+    "Add task for selected day": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adaugă o activitate pentru ziua selectată"
+          }
+        }
+      }
+    },
+    "All tasks completed": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toate activitățile sunt finalizate"
+          }
+        }
+      }
+    },
+    "Apply changes": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aplică modificările"
+          }
+        }
+      }
+    },
+    "Apply from": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aplică începând cu"
+          }
+        }
+      }
+    },
+    "Are you sure you want to delete this task?": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sigur vrei să ștergi această activitate?"
+          }
+        }
+      }
+    },
+    "Back to this week": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Revino la săptămâna curentă"
+          }
+        }
+      }
+    },
+    "Back to today": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Revino la azi"
+          }
+        }
+      }
+    },
+    "By category": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pe categorii"
+          }
+        }
+      }
+    },
+    "By day": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pe zile"
+          }
+        }
+      }
+    },
+    "Cancel": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anulează"
+          }
+        }
+      }
+    },
+    "Category": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Categorie"
+          }
+        }
+      }
+    },
+    "Changes apply from the date below. Completed or skipped tasks, past tasks and individually edited tasks are preserved.": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modificările se aplică începând cu data de mai jos. Activitățile finalizate sau omise, cele din trecut și cele editate individual se păstrează."
+          }
+        }
+      }
+    },
+    "Check the selected weekdays and the end date.": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verifică zilele săptămânii selectate și data de încheiere."
+          }
+        }
+      }
+    },
+    "Choose a date": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alege o dată"
+          }
+        }
+      }
+    },
+    "Choose a day": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alege o zi"
+          }
+        }
+      }
+    },
+    "Choose a period with at least one future occurrence.": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alege o perioadă care să includă cel puțin o repetare în viitor."
+          }
+        }
+      }
+    },
+    "Choose end date": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alege data de încheiere"
+          }
+        }
+      }
+    },
+    "Choose your avatar": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alege-ți avatarul"
+          }
+        }
+      }
+    },
+    "Close": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Închide"
+          }
+        }
+      }
+    },
+    "Complete %@": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finalizează %@"
+          }
+        }
+      }
+    },
+    "completed": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "finalizat"
+          }
+        }
+      }
+    },
+    "Completed · %lld": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finalizate · %lld"
+          }
+        }
+      }
+    },
+    "Could not apply changes": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modificările nu au putut fi aplicate"
+          }
+        }
+      }
+    },
+    "Could not create routine": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rutina nu a putut fi creată"
+          }
+        }
+      }
+    },
+    "Could not save": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salvarea nu a reușit"
+          }
+        }
+      }
+    },
+    "Could not save changes": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modificările nu au putut fi salvate"
+          }
+        }
+      }
+    },
+    "Could not save task": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activitatea nu a putut fi salvată"
+          }
+        }
+      }
+    },
+    "Could not update task": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activitatea nu a putut fi actualizată"
+          }
+        }
+      }
+    },
+    "Create": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Creează"
+          }
+        }
+      }
+    },
+    "Date": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dată"
+          }
+        }
+      }
+    },
+    "Date & time": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dată și oră"
+          }
+        }
+      }
+    },
+    "Delete": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Șterge"
+          }
+        }
+      }
+    },
+    "Delete Task": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Șterge activitatea"
+          }
+        }
+      }
+    },
+    "Delete Task?": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ștergi activitatea?"
+          }
+        }
+      }
+    },
+    "Delete This Occurrence": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Șterge doar această repetare"
+          }
+        }
+      }
+    },
+    "Discard and change day": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Renunță la modificări și schimbă ziua"
+          }
+        }
+      }
+    },
+    "DisciplineTracker": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "DisciplineTracker"
+          }
+        }
+      }
+    },
+    "Done": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gata"
+          }
+        }
+      }
+    },
+    "Duration": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Durată"
+          }
+        }
+      }
+    },
+    "Each day has its own task. Completing or editing one day does not change the others.": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fiecare zi are propria activitate. Finalizarea sau editarea activității dintr-o zi nu le modifică pe celelalte."
+          }
+        }
+      }
+    },
+    "Edit": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Editează"
+          }
+        }
+      }
+    },
+    "Edit Routine": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Editează rutina"
+          }
+        }
+      }
+    },
+    "Edit Task": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Editează activitatea"
+          }
+        }
+      }
+    },
+    "Every day": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "În fiecare zi"
+          }
+        }
+      }
+    },
+    "First day": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prima zi"
+          }
+        }
+      }
+    },
+    "First new occurrence": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prima repetare nouă"
+          }
         }
       }
     },
-    "3 months" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "3 luni"
+    "Food": {
+      "extractionState": "manual",
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mâncare"
           }
         }
       }
     },
-    "4 months" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "4 luni"
+    "Future schedule": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Programul viitor"
           }
         }
       }
     },
-    "6 months" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "6 luni"
+    "Gym": {
+      "extractionState": "manual",
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sală"
           }
         }
       }
     },
-    "Add a task and choose a repeat option." : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Adaugă o activitate și alege cum se repetă."
+    "Household": {
+      "extractionState": "manual",
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acasă"
           }
         }
       }
     },
-    "Add notes..." : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Adaugă notițe..."
+    "How did you feel?": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cum te-ai simțit?"
           }
         }
       }
     },
-    "Add Routine" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Adaugă o rutină"
+    "In 1 hour": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Peste o oră"
           }
         }
       }
     },
-    "Add Task" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Adaugă o activitate"
+    "In 15 minutes": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Peste 15 minute"
           }
         }
       }
     },
-    "Add task for selected day" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Adaugă o activitate pentru ziua selectată"
+    "Journal": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jurnal"
           }
         }
       }
     },
-    "All tasks completed" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Toate activitățile sunt finalizate"
+    "Journal this week": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jurnalul săptămânii"
           }
         }
       }
     },
-    "Apply changes" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aplică modificările"
+    "Keep this task and plan future occurrences of a routine.": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Păstrează această activitate și programează repetările viitoare ale unei rutine."
           }
         }
       }
     },
-    "Apply from" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aplică începând cu"
+    "Last day": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ultima zi"
           }
         }
       }
     },
-    "Are you sure you want to delete this task?" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sigur vrei să ștergi această activitate?"
+    "Make recurring": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Transformă în rutină"
           }
         }
       }
     },
-    "Back to this week" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Revino la săptămâna curentă"
+    "Make time for what matters.": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fă-ți timp pentru ce contează."
           }
         }
       }
     },
-    "Back to today" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Revino la azi"
+    "Manage the schedule later in Weekly → Routines. Editing a task's details changes only that occurrence.": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Poți modifica programul ulterior din Săptămână → Rutine. Editarea detaliilor unei activități modifică doar acea repetare."
           }
         }
       }
     },
-    "By category" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pe categorii"
+    "Mark %@ as pending": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marchează %@ ca fiind de făcut"
           }
         }
       }
     },
-    "By day" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pe zile"
+    "Mark as %@": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marchează ca %@"
           }
         }
       }
     },
-    "Cancel" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Anulează"
+    "Medication": {
+      "extractionState": "manual",
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Medicamente"
           }
         }
       }
     },
-    "Category" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Categorie"
+    "Name": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nume"
           }
         }
       }
     },
-    "Changes apply from the date below. Completed or skipped tasks, past tasks and individually edited tasks are preserved." : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Modificările se aplică începând cu data de mai jos. Activitățile finalizate sau omise, cele din trecut și cele editate individual se păstrează."
+    "New tasks": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activități noi"
           }
         }
       }
     },
-    "Check the selected weekdays and the end date." : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verifică zilele săptămânii selectate și data de încheiere."
+    "Next week": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Săptămâna următoare"
           }
         }
       }
     },
-    "Choose a date" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Alege o dată"
+    "No journal entries yet. Tap a day above to write a few words or record your mood.": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nu ai încă însemnări în jurnal. Apasă o zi de mai sus pentru a scrie câteva cuvinte sau a nota cum te-ai simțit."
           }
         }
       }
     },
-    "Choose a day" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Alege o zi"
+    "No pending tasks": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nu mai ai activități de făcut"
           }
         }
       }
     },
-    "Choose a period with at least one future occurrence." : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Alege o perioadă care să includă cel puțin o repetare în viitor."
+    "No routines yet": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nu ai încă rutine"
           }
         }
       }
     },
-    "Choose end date" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Alege data de încheiere"
+    "No tasks": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nicio activitate"
           }
         }
       }
     },
-    "Choose your avatar" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Alege-ți avatarul"
+    "No tasks planned for this week yet.": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nu ai încă activități planificate pentru această săptămână."
           }
         }
       }
     },
-    "Close" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Închide"
+    "No tasks this week": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nicio activitate în această săptămână"
           }
         }
       }
     },
-    "Complete %@" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Finalizează %@"
+    "No tasks today": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nicio activitate azi"
           }
         }
       }
     },
-    "completed" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "finalizat"
+    "Notes": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notițe"
           }
         }
       }
     },
-    "Completed · %lld" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Finalizate · %lld"
+    "OK": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
           }
         }
       }
     },
-    "Could not apply changes" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Modificările nu au putut fi aplicate"
+    "Only this occurrence moves. The routine's other days stay unchanged. Tomorrow may already contain another occurrence.": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Se mută doar această repetare. Celelalte zile ale rutinei rămân neschimbate. Mâine poate exista deja o altă repetare."
           }
         }
       }
     },
-    "Could not create routine" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Rutina nu a putut fi creată"
+    "Only this occurrence will be deleted. The other days of the routine will remain.": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Se va șterge doar această repetare. Celelalte zile ale rutinei se păstrează."
           }
         }
       }
     },
-    "Could not save" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Salvarea nu a reușit"
+    "Open profile": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deschide profilul"
           }
         }
       }
     },
-    "Could not save changes" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Modificările nu au putut fi salvate"
+    "Optional. Tap the selected mood again to clear it.": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opțional. Apasă din nou starea selectată pentru a anula selecția."
           }
         }
       }
     },
-    "Could not save task" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Activitatea nu a putut fi salvată"
+    "Original task": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activitatea inițială"
           }
         }
       }
     },
-    "Could not update task" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Activitatea nu a putut fi actualizată"
+    "Original task kept": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activitate inițială păstrată"
           }
         }
       }
     },
-    "Create" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Creează"
+    "Other": {
+      "extractionState": "manual",
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Altele"
           }
         }
       }
     },
-    "Date" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dată"
+    "Part of a routine": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Face parte dintr-o rutină"
           }
         }
       }
     },
-    "Date & time" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dată și oră"
+    "Personal": {
+      "extractionState": "manual"
+    },
+    "Previous week": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Săptămâna anterioară"
           }
         }
       }
     },
-    "Delete" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Șterge"
+    "Profile": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Profil"
           }
         }
       }
     },
-    "Delete Task" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Șterge activitatea"
+    "Progress": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Progres"
           }
         }
       }
     },
-    "Delete Task?" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ștergi activitatea?"
+    "Purple: completed · Orange: skipped · Gray: pending. Tap a day to open its journal.": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mov: finalizate · Portocaliu: omise · Gri: de făcut. Apasă o zi pentru a deschide jurnalul ei."
           }
         }
       }
     },
-    "Delete This Occurrence" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Șterge doar această repetare"
+    "Removes upcoming, uncompleted appearances from “Apply from”. Individually edited appearances remain.": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elimină repetările viitoare nefinalizate începând cu data aleasă la „Aplică începând cu”. Repetările editate individual se păstrează."
           }
         }
       }
     },
-    "Discard and change day" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Renunță la modificări și schimbă ziua"
+    "Repeat": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Repetare"
           }
         }
       }
     },
-    "DisciplineTracker" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "DisciplineTracker"
+    "Repeat for": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Repetă timp de"
           }
         }
       }
     },
-    "Done" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gata"
+    "Repeat on": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Repetă în zilele"
           }
         }
       }
     },
-    "Duration" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Durată"
+    "Repetition": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Repetare"
           }
         }
       }
     },
-    "Each day has its own task. Completing or editing one day does not change the others." : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Fiecare zi are propria activitate. Finalizarea sau editarea activității dintr-o zi nu le modifică pe celelalte."
+    "Reschedule": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reprogramează"
           }
         }
       }
     },
-    "Edit" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Editează"
+    "Review": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verificare"
           }
         }
       }
     },
-    "Edit Routine" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Editează rutina"
+    "Review changes": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verifică modificările"
           }
         }
       }
     },
-    "Edit Task" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Editează activitatea"
+    "Review shows how many tasks will be added, updated or removed. Nothing changes until you confirm.": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verificarea arată câte activități vor fi adăugate, actualizate sau eliminate. Modificările se aplică doar după confirmare."
           }
         }
       }
     },
-    "Every day" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "În fiecare zi"
+    "Routine": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rutină"
           }
         }
       }
     },
-    "First day" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Prima zi"
+    "Routine time": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ora rutinei"
           }
         }
       }
     },
-    "First new occurrence" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Prima repetare nouă"
+    "Routines": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rutine"
           }
         }
       }
     },
-    "Food" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mâncare"
+    "Save": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salvează"
           }
         }
       }
     },
-    "Future schedule" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Programul viitor"
+    "Save and change day": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salvează și schimbă ziua"
           }
         }
       }
     },
-    "Gym" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sală"
+    "Save your journal entry before opening another day?": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salvezi însemnarea din jurnal înainte să deschizi altă zi?"
           }
         }
       }
     },
-    "Household" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Acasă"
+    "Saved": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salvat"
           }
         }
       }
     },
-    "How did you feel?" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cum te-ai simțit?"
+    "Schedule": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Program"
           }
         }
       }
     },
-    "In 1 hour" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Peste o oră"
+    "Skipped": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Omisă"
           }
         }
       }
     },
-    "In 15 minutes" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Peste 15 minute"
+    "Skipped · %lld": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Omise · %lld"
           }
         }
       }
     },
-    "Journal" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Jurnal"
+    "Skipped stays in your plan, but is no longer pending and receives no reminders. Progress counts only completed tasks.": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O activitate omisă rămâne în plan, dar nu mai este de făcut și nu mai primește notificări. Progresul include doar activitățile finalizate."
           }
         }
       }
     },
-    "Journal this week" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Jurnalul săptămânii"
+    "Sleep": {
+      "extractionState": "manual",
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Somn"
           }
         }
       }
     },
-    "Keep this task and plan future occurrences of a routine." : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Păstrează această activitate și programează repetările viitoare ale unei rutine."
+    "Starts": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Începe"
           }
         }
       }
     },
-    "Last day" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ultima zi"
+    "Status": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stare"
           }
         }
       }
     },
-    "Make recurring" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Transformă în rutină"
+    "Stop routine": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oprește rutina"
           }
         }
       }
     },
-    "Make time for what matters." : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Fă-ți timp pentru ce contează."
+    "Stop routine from selected date": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oprește rutina începând cu data selectată"
           }
         }
       }
     },
-    "Manage the schedule later in Weekly → Routines. Editing a task's details changes only that occurrence." : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Poți modifica programul ulterior din Săptămână → Rutine. Editarea detaliilor unei activități modifică doar acea repetare."
+    "Stored on this device": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salvate pe acest dispozitiv"
           }
         }
       }
     },
-    "Mark %@ as pending" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Marchează %@ ca fiind de făcut"
+    "Study": {
+      "extractionState": "manual",
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Studiu"
           }
         }
       }
     },
-    "Mark as %@" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Marchează ca %@"
+    "Summary": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rezumat"
           }
         }
       }
     },
-    "Medication" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Medicamente"
+    "Tap + to add a task.": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apasă + pentru a adăuga o activitate."
           }
         }
       }
     },
-    "Name" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nume"
+    "Tap to choose another day": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apasă pentru a alege altă zi"
           }
         }
       }
     },
-    "New tasks" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Activități noi"
+    "Task": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activitate"
           }
         }
       }
     },
-    "Next week" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Săptămâna următoare"
+    "Task Details": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Detaliile activității"
           }
         }
       }
     },
-    "No journal entries yet. Tap a day above to write a few words or record your mood." : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nu ai încă însemnări în jurnal. Apasă o zi de mai sus pentru a scrie câteva cuvinte sau a nota cum te-ai simțit."
+    "Tasks": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activități"
           }
         }
       }
     },
-    "No pending tasks" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nu mai ai activități de făcut"
+    "Tasks scheduled for this day": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activități programate pentru această zi"
           }
         }
       }
     },
-    "No routines yet" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nu ai încă rutine"
+    "Tasks to create": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activități de creat"
           }
         }
       }
     },
-    "No tasks" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nicio activitate"
+    "The first two options use the current time. Tomorrow keeps the task's scheduled hour.": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Primele două opțiuni calculează noua oră pornind de acum. Opțiunea pentru mâine păstrează ora programată a activității."
           }
         }
       }
     },
-    "No tasks planned for this week yet." : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nu ai încă activități planificate pentru această săptămână."
+    "The original task keeps its date, time and status. Only future occurrences are added, with at most one new occurrence per day. Its original day is never duplicated.": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activitatea inițială își păstrează data, ora și starea. Se adaugă doar repetări viitoare, cel mult una nouă pe zi. Nu se adaugă o repetare în ziua activității inițiale."
           }
         }
       }
     },
-    "No tasks this week" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nicio activitate în această săptămână"
+    "These figures reflect the tasks currently scheduled for this week. Skipped tasks remain in Planned, but do not count as completed or pending. Moving or deleting a task updates these figures.": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aceste valori reflectă activitățile programate în prezent pentru această săptămână. Activitățile omise rămân în totalul celor planificate, dar nu sunt considerate finalizate sau de făcut. Mutarea ori ștergerea unei activități actualizează aceste valori."
           }
         }
       }
     },
-    "No tasks today" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nicio activitate azi"
+    "This summary reflects the tasks currently assigned to this date.": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acest rezumat reflectă activitățile programate în prezent pentru această dată."
           }
         }
       }
     },
-    "Notes" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Notițe"
+    "This week": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Săptămâna curentă"
           }
         }
       }
     },
-    "OK" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "OK"
+    "Time": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oră"
           }
         }
       }
     },
-    "Only this occurrence moves. The routine's other days stay unchanged. Tomorrow may already contain another occurrence." : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Se mută doar această repetare. Celelalte zile ale rutinei rămân neschimbate. Mâine poate exista deja o altă repetare."
+    "Title": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Titlu"
           }
         }
       }
     },
-    "Only this occurrence will be deleted. The other days of the routine will remain." : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Se va șterge doar această repetare. Celelalte zile ale rutinei se păstrează."
+    "Today's Tasks": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activitățile de azi"
           }
         }
       }
     },
-    "Open profile" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Deschide profilul"
+    "Tomorrow, same time": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mâine, la aceeași oră"
           }
         }
       }
     },
-    "Optional. Tap the selected mood again to clear it." : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Opțional. Apasă din nou starea selectată pentru a anula selecția."
+    "Undo last reschedule": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anulează ultima reprogramare"
           }
         }
       }
     },
-    "Original task" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Activitatea inițială"
+    "Unsaved changes": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modificări nesalvate"
           }
         }
       }
     },
-    "Original task kept" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Activitate inițială păstrată"
+    "Until %@": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Până la %@"
           }
         }
       }
     },
-    "Other" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Altele"
+    "Weekly": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Săptămână"
           }
         }
       }
     },
-    "Part of a routine" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Face parte dintr-o rutină"
+    "Weekly insights": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Statistici săptămânale"
           }
         }
       }
     },
-    "Personal" : {
-      "extractionState" : "manual"
+    "Weekly progress": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Progresul săptămânii"
+          }
+        }
+      }
     },
-    "Previous week" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Săptămâna anterioară"
+    "What went well? What would you change?": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce a mers bine? Ce ai schimba?"
           }
         }
       }
     },
-    "Profile" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Profil"
+    "Work": {
+      "extractionState": "manual",
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Muncă"
           }
         }
       }
     },
-    "Progress" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Progres"
+    "Write as much or as little as you want. Tap Save to keep your changes.": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scrie cât dorești. Apasă Salvează pentru a păstra modificările."
           }
         }
       }
     },
-    "Purple: completed · Orange: skipped · Gray: pending. Tap a day to open its journal." : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mov: finalizate · Portocaliu: omise · Gri: de făcut. Apasă o zi pentru a deschide jurnalul ei."
+    "Your categories will appear when you plan tasks.": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Categoriile vor apărea când planifici activități."
           }
         }
       }
     },
-    "Removes upcoming, uncompleted appearances from “Apply from”. Individually edited appearances remain." : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Elimină repetările viitoare nefinalizate începând cu data aleasă la „Aplică începând cu”. Repetările editate individual se păstrează."
+    "Your changes save automatically on this device.": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modificările se salvează automat pe acest dispozitiv."
           }
         }
       }
     },
-    "Repeat" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Repetare"
+    "Your data": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Datele tale"
           }
         }
       }
     },
-    "Repeat for" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Repetă timp de"
+    "Your name": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Numele tău"
           }
         }
       }
     },
-    "Repeat on" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Repetă în zilele"
+    "Your thoughts": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gândurile tale"
           }
         }
       }
     },
-    "Repetition" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Repetare"
+    "Your week": {
+      "localizations": {
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Săptămâna ta"
           }
         }
       }
     },
-    "Reschedule" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Reprogramează"
+    "Notifications": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notifications"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notificări"
           }
         }
       }
     },
-    "Review" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verificare"
+    "At the start": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "At the start"
           }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La început"
+          }
         }
       }
     },
-    "Review changes" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verifică modificările"
+    "15 minutes after (existing reminder)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "15 minutes after (existing reminder)"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La 15 minute după (notificare existentă)"
           }
         }
       }
     },
-    "Review shows how many tasks will be added, updated or removed. Nothing changes until you confirm." : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verificarea arată câte activități vor fi adăugate, actualizate sau eliminate. Modificările se aplică doar după confirmare."
+    "%lld minutes before": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld minutes before"
           }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cu %lld minute înainte"
+          }
         }
       }
     },
-    "Routine" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Rutină"
+    "Reminders for this activity": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reminders for this activity"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notificări pentru această activitate"
           }
         }
       }
     },
-    "Routine time" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ora rutinei"
+    "Custom interval": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Custom interval"
           }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Interval personalizat"
+          }
         }
       }
     },
-    "Routines" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Rutine"
+    "Unit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unit"
           }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unitate"
+          }
         }
       }
     },
-    "Save" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Salvează"
+    "Minutes": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Minutes"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Minute"
           }
         }
       }
     },
-    "Save and change day" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Salvează și schimbă ziua"
+    "Hours": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hours"
           }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ore"
+          }
         }
       }
     },
-    "Save your journal entry before opening another day?" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Salvezi însemnarea din jurnal înainte să deschizi altă zi?"
+    "Add interval": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add interval"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adaugă interval"
           }
         }
       }
     },
-    "Saved" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Salvat"
+    "Enter a positive interval of up to 30 days.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter a positive interval of up to 30 days."
           }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Introdu un interval pozitiv de cel mult 30 de zile."
+          }
         }
       }
     },
-    "Schedule" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Program"
+    "All notifications are paused in Profile. Your choices are kept.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All notifications are paused in Profile. Your choices are kept."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toate notificările sunt oprite din Profil. Opțiunile tale se păstrează."
           }
         }
       }
     },
-    "Skipped" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Omisă"
+    "Allow notifications": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow notifications"
           }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Permite notificările"
+          }
         }
       }
     },
-    "Skipped · %lld" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Omise · %lld"
+    "Notifications are disabled in iPhone Settings.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notifications are disabled in iPhone Settings."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notificările sunt dezactivate din configurările iPhone-ului."
           }
         }
       }
     },
-    "Skipped stays in your plan, but is no longer pending and receives no reminders. Progress counts only completed tasks." : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "O activitate omisă rămâne în plan, dar nu mai este de făcut și nu mai primește notificări. Progresul include doar activitățile finalizate."
+    "Open notification settings": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open notification settings"
           }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deschide configurările notificărilor"
+          }
         }
       }
     },
-    "Sleep" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Somn"
+    "Select one or more reminders. Switch off an interval to remove it.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Select one or more reminders. Switch off an interval to remove it."
           }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selectează una sau mai multe notificări. Debifează un interval pentru a-l elimina."
+          }
         }
       }
     },
-    "Starts" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Începe"
+    "No upcoming reminders for a completed or skipped activity.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No upcoming reminders for a completed or skipped activity."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activitățile finalizate sau omise nu mai au notificări viitoare."
           }
         }
       }
     },
-    "Status" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Stare"
+    "No reminders": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No reminders"
           }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fără notificări"
+          }
         }
       }
     },
-    "Stop routine" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Oprește rutina"
+    "Reminder times": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reminder times"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Orele notificărilor"
           }
         }
       }
     },
-    "Stop routine from selected date" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Oprește rutina începând cu data selectată"
+    "Passed — will not be scheduled": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Passed — will not be scheduled"
           }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A trecut — nu va fi programată"
+          }
         }
       }
     },
-    "Stored on this device" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Salvate pe acest dispozitiv"
+    "Enable all notifications": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enable all notifications"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activează toate notificările"
           }
         }
       }
     },
-    "Study" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Studiu"
+    "Permission": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Permission"
           }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Permisiune"
+          }
         }
       }
     },
-    "Summary" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Rezumat"
+    "Test notifications": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Test notifications"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Testează notificările"
           }
         }
       }
     },
-    "Tap + to add a task." : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Apasă + pentru a adăuga o activitate."
+    "Test scheduled in 5 seconds. You can lock your screen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Test scheduled in 5 seconds. You can lock your screen."
           }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Test programat peste 5 secunde. Poți bloca ecranul."
+          }
         }
       }
     },
-    "Tap to choose another day" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Apasă pentru a alege altă zi"
+    "Retry scheduling": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retry scheduling"
           }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reîncearcă programarea"
+          }
         }
       }
     },
-    "Task" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Activitate"
+    "Some later reminders are not scheduled yet. Open the app regularly to schedule the next ones.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Some later reminders are not scheduled yet. Open the app regularly to schedule the next ones."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unele notificări mai îndepărtate nu sunt încă programate. Deschide periodic aplicația pentru a le programa pe următoarele."
           }
         }
       }
     },
-    "Task Details" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Detaliile activității"
+    "Last scheduled reminder": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last scheduled reminder"
           }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ultima notificare programată"
+          }
         }
       }
     },
-    "Tasks" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Activități"
+    "Notification settings": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notification settings"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configurări notificări"
           }
         }
       }
     },
-    "Tasks scheduled for this day" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Activități programate pentru această zi"
+    "Pausing keeps your choices. Focus, Silent mode and Scheduled Summary may affect alerts and sounds.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pausing keeps your choices. Focus, Silent mode and Scheduled Summary may affect alerts and sounds."
           }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oprirea notificărilor păstrează opțiunile tale. Modul Concentrare, modul Silențios și Rezumatul programat pot influența alertele și sunetele."
+          }
         }
       }
     },
-    "Tasks to create" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Activități de creat"
+    "Defaults for new activities": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Defaults for new activities"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Setări implicite pentru activități noi"
           }
         }
       }
     },
-    "The first two options use the current time. Tomorrow keeps the task's scheduled hour." : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Primele două opțiuni calculează noua oră pornind de acum. Opțiunea pentru mâine păstrează ora programată a activității."
+    "Default reminders apply only to new activities and routines. Existing activities keep their choices.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Default reminders apply only to new activities and routines. Existing activities keep their choices."
           }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notificările implicite se aplică doar activităților și rutinelor noi. Cele existente își păstrează opțiunile."
+          }
         }
       }
     },
-    "The original task keeps its date, time and status. Only future occurrences are added, with at most one new occurrence per day. Its original day is never duplicated." : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Activitatea inițială își păstrează data, ora și starea. Se adaugă doar repetări viitoare, cel mult una nouă pe zi. Nu se adaugă o repetare în ziua activității inițiale."
+    "Reminder choices apply only to new occurrences. The original task keeps its reminders.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reminder choices apply only to new occurrences. The original task keeps its reminders."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opțiunile de notificare se aplică doar repetărilor noi. Activitatea inițială își păstrează notificările."
           }
         }
       }
     },
-    "These figures reflect the tasks currently scheduled for this week. Skipped tasks remain in Planned, but do not count as completed or pending. Moving or deleting a task updates these figures." : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aceste valori reflectă activitățile programate în prezent pentru această săptămână. Activitățile omise rămân în totalul celor planificate, dar nu sunt considerate finalizate sau de făcut. Mutarea ori ștergerea unei activități actualizează aceste valori."
+    "Additional reminder": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Additional reminder"
           }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notificare suplimentară"
+          }
         }
       }
     },
-    "This summary reflects the tasks currently assigned to this date." : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Acest rezumat reflectă activitățile programate în prezent pentru această dată."
+    "Not requested": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not requested"
           }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nu a fost solicitată"
+          }
         }
       }
     },
-    "This week" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Săptămâna curentă"
+    "Disabled in Settings": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Disabled in Settings"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dezactivate din configurări"
           }
         }
       }
     },
-    "Time" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Oră"
+    "Quiet delivery": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quiet delivery"
           }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Livrare silențioasă"
+          }
         }
       }
     },
-    "Title" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Titlu"
+    "Allowed": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allowed"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Permise"
           }
         }
       }
     },
-    "Today's Tasks" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Activitățile de azi"
+    "Unknown": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unknown"
           }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Necunoscută"
+          }
         }
       }
     },
-    "Tomorrow, same time" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mâine, la aceeași oră"
+    "Complete activity": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Complete activity"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finalizează activitatea"
           }
         }
       }
     },
-    "Undo last reschedule" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Anulează ultima reprogramare"
+    "Remind me in 10 minutes": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remind me in 10 minutes"
           }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amintește-mi peste 10 minute"
+          }
         }
       }
     },
-    "Unsaved changes" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Modificări nesalvate"
+    "Could not request notification permission.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not request notification permission."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Permisiunea pentru notificări nu a putut fi solicitată."
           }
         }
       }
     },
-    "Until %@" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Până la %@"
+    "Could not load activities for notifications.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not load activities for notifications."
           }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activitățile pentru notificări nu au putut fi încărcate."
+          }
         }
       }
     },
-    "Weekly" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Săptămână"
+    "Starts in %lld minutes.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Starts in %lld minutes."
           }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Începe peste %lld minute."
+          }
         }
       }
     },
-    "Weekly insights" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Statistici săptămânale"
+    "It's time to start.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "It's time to start."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Este timpul să începi."
           }
         }
       }
     },
-    "Weekly progress" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Progresul săptămânii"
+    "This activity is still pending.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This activity is still pending."
           }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Această activitate este încă de făcut."
+          }
         }
       }
     },
-    "What went well? What would you change?" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ce a mers bine? Ce ai schimba?"
+    "Some reminders could not be scheduled.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Some reminders could not be scheduled."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unele notificări nu au putut fi programate."
           }
         }
       }
     },
-    "Work" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Muncă"
+    "Test notification": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Test notification"
           }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notificare de test"
+          }
         }
       }
     },
-    "Write as much or as little as you want. Tap Save to keep your changes." : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Scrie cât dorești. Apasă Salvează pentru a păstra modificările."
+    "Your reminders are ready.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your reminders are ready."
           }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notificările tale sunt pregătite."
+          }
         }
       }
     },
-    "Your categories will appear when you plan tasks." : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Categoriile vor apărea când planifici activități."
+    "The notification action could not be saved.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The notification action could not be saved."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acțiunea din notificare nu a putut fi salvată."
           }
         }
       }
     },
-    "Your changes save automatically on this device." : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Modificările se salvează automat pe acest dispozitiv."
+    "Enable notifications in Profile first.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enable notifications in Profile first."
           }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activează mai întâi notificările din Profil."
+          }
         }
       }
     },
-    "Your data" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Datele tale"
+    "Allow notifications in iPhone Settings first.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow notifications in iPhone Settings first."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Permite mai întâi notificările din configurările iPhone-ului."
           }
         }
       }
     },
-    "Your name" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Numele tău"
+    "Activity unavailable": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activity unavailable"
           }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activitatea nu mai este disponibilă"
+          }
         }
       }
     },
-    "Your thoughts" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gândurile tale"
+    "Notification action": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notification action"
           }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acțiune din notificare"
+          }
         }
       }
     },
-    "Your week" : {
-      "localizations" : {
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Săptămâna ta"
+    "Use default reminders": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Use default reminders"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Folosește notificări implicite"
           }
         }
       }
     }
   },
-  "version" : "1.2"
+  "version": "1.2"
 }

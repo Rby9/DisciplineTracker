@@ -88,7 +88,23 @@ struct Checks {
         let routines = try context.fetch(FetchDescriptor<TaskSeries>())
         try expect(routines.count == 1 && routines[0].excludedDayKeys == nil,
                    "Migration must preserve existing routine")
-        print("PASS: legacy SwiftData store migration")
+        try expect(legacyTasks.allSatisfy { $0.reminderOffsets == nil && $0.effectiveReminderOffsets == [10, 0, -15] },
+                   "Legacy tasks retain all three old reminders")
+        try expect(routines[0].effectiveReminderOffsets == [10, 0, -15], "Legacy routines retain reminders")
+        try expect(legacyTasks.allSatisfy { $0.snoozedUntil == nil && $0.reminderOverride == nil },
+                   "New optional fields default safely")
+        try expect(ReminderPolicy.normalized([30, 10, 30, 0, -15, -20, 999999]) == [30, 10, 0, -15],
+                   "Reminder offsets are unique and bounded")
+        let midnight = first.addingTimeInterval(15 * 60)
+        let earlier = ReminderPolicy.fireDate(start: midnight, offset: 30)
+        try expect(calendar.component(.hour, from: earlier) == 23 && calendar.component(.minute, from: earlier) == 45,
+                   "Reminder before midnight belongs to the previous day")
+        for start in [spring, autumn] {
+            let reminder = ReminderPolicy.fireDate(start: start.addingTimeInterval(4 * 3600), offset: 120)
+            try expect(start.addingTimeInterval(4 * 3600).timeIntervalSince(reminder) == 7200,
+                       "Offsets represent elapsed minutes across DST")
+        }
+        print("PASS: legacy migration, reminder normalization and date boundaries")
 
         let original = TaskItem(title: "Conversion source", category: .food,
                                 startTime: noon, isCompleted: false, notes: "Original notes")
@@ -98,8 +114,13 @@ struct Checks {
         try context.save()
         let series = try RoutineConversion.create(for: original, firstDay: first, lastDay: last,
                                                    hour: 12, minute: 0, weekdays: Set(1...7),
-                                                   in: context, now: first, calendar: calendar)
+                                                   in: context, now: first, calendar: calendar, reminderOffsets: [30, 5])
         let linked = try context.fetch(FetchDescriptor<TaskItem>()).filter { $0.seriesID == series.id }
+        try expect(series.effectiveReminderOffsets == [30, 5], "Routine stores new offsets")
+        try expect(original.effectiveReminderOffsets == [10, 0, -15] && original.reminderOverride == true,
+                   "Conversion keeps original reminder choices")
+        try expect(linked.filter { $0.id != originalID }.allSatisfy { $0.effectiveReminderOffsets == [30, 5] },
+                   "Future occurrences receive selected offsets")
         try expect(linked.count == 7, "Conversion keeps one original plus six future occurrences")
         try expect(original.id == originalID && original.startTime == noon && original.isSkipped,
                    "Conversion must preserve original identity, time and status")
@@ -112,11 +133,16 @@ struct Checks {
                                               in: context, now: first, calendar: calendar)
             throw CheckError(message: "A second conversion was accepted")
         } catch RoutineConversion.ConversionError.alreadyRecurring {}
+        original.snoozedUntil = noon.addingTimeInterval(600)
+        original.snoozedStartTime = noon
         original.setStatus(.completed)
+        try expect(original.snoozedUntil == nil && original.snoozedStartTime == nil,
+                   "Completing cancels a snooze")
         try expect(original.isCompleted && !original.isSkipped && !original.isPending, "Completed is exclusive")
         original.setStatus(.pending)
         try expect(original.isPending && !original.isCompleted && !original.isSkipped, "Pending is exclusive")
         original.setStatus(.skipped)
+        original.reminderOffsets = []
         series.excludedDayKeys = [JournalEntry.key(for: last)]
         try context.save()
         let freshContext = ModelContext(container)
@@ -124,6 +150,9 @@ struct Checks {
         try expect(persisted?.isSkipped == true, "Skipped must persist after a fresh fetch")
         let savedRoutine = try freshContext.fetch(FetchDescriptor<TaskSeries>()).first { $0.id == series.id }
         try expect(savedRoutine?.excludedDayKeys?.count == 1, "Exclusion must persist")
+        try expect(persisted?.reminderOffsets == [] && persisted?.effectiveReminderOffsets == [],
+                   "Disabled reminders persist as an empty array, not legacy defaults")
+        try expect(savedRoutine?.effectiveReminderOffsets == [30, 5], "Routine reminders persist")
         print("PASS: conversion identity, no duplicates, status exclusivity and persistence")
         print("All native checks passed.")
     }

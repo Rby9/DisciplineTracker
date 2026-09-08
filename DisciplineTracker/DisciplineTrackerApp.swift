@@ -30,8 +30,6 @@ struct DisciplineTrackerApp: App {
         NotificationManager.shared.configure(
             with: modelContainer.mainContext
         )
-
-        NotificationManager.shared.requestPermission()
     }
 
     // MARK: - Body
@@ -39,6 +37,7 @@ struct DisciplineTrackerApp: App {
     var body: some Scene {
         WindowGroup {
             MainView()
+                .background { NotificationRoutePresenter().frame(width: 0, height: 0) }
                 .task {
                     NotificationManager.shared
                         .refreshNotifications()

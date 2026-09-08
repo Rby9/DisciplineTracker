@@ -16,6 +16,7 @@ xcrun swiftc -target "$(uname -m)-apple-macosx14.0" -parse-as-library -module-na
     DisciplineTracker/Utilities/Color+Hex.swift \
     DisciplineTracker/Utilities/AppTheme.swift \
     DisciplineTracker/Utilities/RecurrenceSchedule.swift \
+    DisciplineTracker/Utilities/ReminderPolicy.swift \
     DisciplineTracker/Services/RoutineConversion.swift \
     Verification/Checks.swift -o "$tracker_check_dir/checks"
 "$tracker_check_dir/checks" "$tracker_check_dir/migration.store"

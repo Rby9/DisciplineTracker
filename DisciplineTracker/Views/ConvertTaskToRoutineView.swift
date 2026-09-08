@@ -10,6 +10,7 @@ struct ConvertTaskToRoutineView: View {
     @State private var firstDay: Date
     @State private var time: Date
     @State private var lastDay: Date
+    @State private var reminderOffsets: [Int]
     @State private var months = 3
     @State private var everyDay = true
     @State private var weekdays: Set<Int> = [2, 3, 4, 5, 6]
@@ -19,6 +20,7 @@ struct ConvertTaskToRoutineView: View {
 
     init(task: TaskItem) {
         self.task = task
+        _reminderOffsets = State(initialValue: task.effectiveReminderOffsets)
         let first = Calendar.current.startOfDay(for: max(Date(), task.startTime))
         _firstDay = State(initialValue: first)
         _time = State(initialValue: task.startTime)
@@ -75,6 +77,8 @@ struct ConvertTaskToRoutineView: View {
                         LabeledContent("Last day") { Text(endDate, style: .date) }
                     }
                 }
+                ReminderOptionsSection(offsets: $reminderOffsets, startTime: preview.first)
+                Section { Text("Reminder choices apply only to new occurrences. The original task keeps its reminders.") }
                 Section("Review") {
                     LabeledContent("Original task kept", value: "1")
                     LabeledContent("New tasks", value: "\(preview.count)")
@@ -128,9 +132,12 @@ struct ConvertTaskToRoutineView: View {
             try RoutineConversion.create(
                 for: task, firstDay: firstDay, lastDay: endDate,
                 hour: clock.hour ?? 0, minute: clock.minute ?? 0,
-                weekdays: activeWeekdays, in: modelContext
+                weekdays: activeWeekdays, in: modelContext, reminderOffsets: reminderOffsets
             )
             NotificationManager.shared.refreshNotifications()
+            if !reminderOffsets.isEmpty && ReminderPreferences.enabled {
+                NotificationManager.shared.requestPermission()
+            }
             dismiss()
         } catch {
             errorMessage = error.localizedDescription

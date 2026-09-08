@@ -25,6 +25,7 @@ struct EditRoutineView: View {
     @State private var selectedTime: Date
     @State private var endDate: Date
     @State private var effectiveDate: Date
+    @State private var reminderOffsets: [Int]
 
     @State private var reviewedPlan: RoutineChangePlan?
     @State private var showConfirmation = false
@@ -41,6 +42,7 @@ struct EditRoutineView: View {
 
     init(routine: TaskSeries) {
         self.routine = routine
+        _reminderOffsets = State(initialValue: routine.effectiveReminderOffsets)
 
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: Date())
@@ -75,6 +77,7 @@ struct EditRoutineView: View {
             routineSection
             weekdaysSection
             scheduleSection
+            ReminderOptionsSection(offsets: $reminderOffsets, startTime: reminderPreviewDate)
             reviewSection
             stopSection
         }
@@ -176,6 +179,15 @@ struct EditRoutineView: View {
                 displayedComponents: [.date]
             )
         }
+    }
+
+    private var reminderPreviewDate: Date? {
+        let time = calendar.dateComponents([.hour, .minute], from: selectedTime)
+        return try? RecurrenceSchedule.dates(
+            from: max(effectiveDate, routine.startDate), through: endDate,
+            hour: time.hour ?? 0, minute: time.minute ?? 0,
+            weekdays: selectedWeekdays, after: Date()
+        ).first
     }
 
     // MARK: - Review
@@ -341,7 +353,8 @@ struct EditRoutineView: View {
             lastDay: lastDay,
             hour: hour,
             minute: minute,
-            weekdays: selectedWeekdays.sorted()
+            weekdays: selectedWeekdays.sorted(),
+            reminderOffsets: ReminderPolicy.normalized(reminderOffsets)
         )
 
         var occupiedDays: Set<Date> = []
@@ -366,7 +379,8 @@ struct EditRoutineView: View {
                 task.startTime != originalDate ||
                 task.title != routine.title ||
                 task.category != routine.category ||
-                task.notes != routine.notes
+                task.notes != routine.notes ||
+                task.reminderOverride == true
 
             if !task.isPending ||
                 task.startTime <= now ||
@@ -376,7 +390,7 @@ struct EditRoutineView: View {
             }
 
             if let desiredDate = desiredDates[originalDay] {
-                if task.startTime != desiredDate {
+                if task.startTime != desiredDate || task.effectiveReminderOffsets != plan.reminderOffsets {
                     plan.updates.append(
                         RoutineTaskUpdate(
                             task: task,
@@ -467,6 +481,9 @@ struct EditRoutineView: View {
             }
 
             for update in freshPlan.updates {
+                update.task.reminderOffsets = freshPlan.reminderOffsets
+                update.task.snoozedUntil = nil
+                update.task.snoozedStartTime = nil
                 update.task.startTime = update.date
                 update.task.originalScheduledDate = update.date
             }
@@ -482,6 +499,7 @@ struct EditRoutineView: View {
                     originalScheduledDate: date
                 )
 
+                task.reminderOffsets = freshPlan.reminderOffsets
                 modelContext.insert(task)
             }
 
@@ -497,6 +515,7 @@ struct EditRoutineView: View {
                     previousDay
                 )
             } else {
+                routine.reminderOffsets = freshPlan.reminderOffsets
                 routine.weekdays = freshPlan.weekdays
                 routine.hour = freshPlan.hour
                 routine.minute = freshPlan.minute
@@ -506,6 +525,9 @@ struct EditRoutineView: View {
             try modelContext.save()
 
             NotificationManager.shared.refreshNotifications()
+            if !freshPlan.isStopping && !reminderOffsets.isEmpty && ReminderPreferences.enabled {
+                NotificationManager.shared.requestPermission()
+            }
             dismiss()
 
         } catch {
@@ -536,6 +558,7 @@ private struct RoutineChangePlan {
     let hour: Int
     let minute: Int
     let weekdays: [Int]
+    let reminderOffsets: [Int]
 
     var additions: [Date] = []
     var updates: [RoutineTaskUpdate] = []
@@ -581,6 +604,7 @@ private struct RoutineChangePlan {
             String(hour),
             String(minute),
             weekdays.map { String($0) }.joined(separator: ","),
+            reminderOffsets.map { String($0) }.joined(separator: ","),
             added,
             updated,
             removed,

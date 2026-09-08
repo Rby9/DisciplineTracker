@@ -15,6 +15,7 @@ struct AddTaskView: View {
     @State private var category: TaskCategory = .other
     @State private var startTime: Date
     @State private var notes = ""
+    @State private var reminderOffsets = ReminderPreferences.defaultOffsets
 
     // MARK: - Recurrence Properties
 
@@ -180,6 +181,7 @@ struct AddTaskView: View {
                     summarySection
                 }
 
+                ReminderOptionsSection(offsets: $reminderOffsets, startTime: previewDates.first ?? startTime)
                 notesSection
             }
             .navigationTitle(
@@ -435,6 +437,7 @@ struct AddTaskView: View {
                     weekdays: activeWeekdays
                 )
 
+                series.reminderOffsets = ReminderPolicy.normalized(reminderOffsets)
                 modelContext.insert(series)
                 insertedSeries = series
             }
@@ -450,6 +453,7 @@ struct AddTaskView: View {
                     originalScheduledDate: isRecurring ? date : nil
                 )
 
+                task.reminderOffsets = ReminderPolicy.normalized(reminderOffsets)
                 modelContext.insert(task)
                 insertedTasks.append(task)
             }
@@ -457,6 +461,9 @@ struct AddTaskView: View {
             try modelContext.save()
 
             NotificationManager.shared.refreshNotifications()
+            if !reminderOffsets.isEmpty && ReminderPreferences.enabled {
+                NotificationManager.shared.requestPermission()
+            }
             dismiss()
 
         } catch {

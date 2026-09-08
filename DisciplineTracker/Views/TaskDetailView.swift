@@ -73,6 +73,15 @@ struct TaskDetailView: View {
                 rescheduleSection
             }
 
+            Section("Notifications") {
+                ReminderPreview(offsets: task.effectiveReminderOffsets, startTime: task.startTime, isPending: task.isPending)
+                if task.isPending, let snooze = task.snoozedUntil,
+                   task.snoozedStartTime == task.startTime, snooze > Date() {
+                    LabeledContent("Additional reminder") {
+                        Text(snooze, format: .dateTime.day().month(.abbreviated).hour().minute())
+                    }
+                }
+            }
             notesSection
             if task.seriesID == nil {
                 Section {
@@ -341,6 +350,10 @@ struct TaskDetailView: View {
             return
         }
 
+        let oldSnooze = task.snoozedUntil
+        let oldSnoozeStart = task.snoozedStartTime
+        task.snoozedUntil = nil
+        task.snoozedStartTime = nil
         task.startTime = newDate
 
         do {
@@ -355,6 +368,8 @@ struct TaskDetailView: View {
 
         } catch {
             task.startTime = oldDate
+            task.snoozedUntil = oldSnooze
+            task.snoozedStartTime = oldSnoozeStart
             errorMessage = error.localizedDescription
             showError = true
         }
@@ -367,6 +382,10 @@ struct TaskDetailView: View {
         }
 
         let currentDate = task.startTime
+        let oldSnooze = task.snoozedUntil
+        let oldSnoozeStart = task.snoozedStartTime
+        task.snoozedUntil = nil
+        task.snoozedStartTime = nil
         task.startTime = previousDate
 
         do {
@@ -381,6 +400,8 @@ struct TaskDetailView: View {
 
         } catch {
             task.startTime = currentDate
+            task.snoozedUntil = oldSnooze
+            task.snoozedStartTime = oldSnoozeStart
             errorMessage = error.localizedDescription
             showError = true
         }

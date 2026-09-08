@@ -18,6 +18,7 @@ struct EditTaskView: View {
     @State private var category: TaskCategory
     @State private var startTime: Date
     @State private var notes: String
+    @State private var reminderOffsets: [Int]
 
     // MARK: - Initialization
 
@@ -28,6 +29,7 @@ struct EditTaskView: View {
         _category = State(initialValue: task.category)
         _startTime = State(initialValue: task.startTime)
         _notes = State(initialValue: task.notes)
+        _reminderOffsets = State(initialValue: task.effectiveReminderOffsets)
     }
 
     // MARK: - Body
@@ -36,6 +38,7 @@ struct EditTaskView: View {
         NavigationStack {
             AppForm {
                 taskSection
+                ReminderOptionsSection(offsets: $reminderOffsets, startTime: startTime)
                 notesSection
             }
             .navigationTitle("Edit Task")
@@ -111,10 +114,21 @@ struct EditTaskView: View {
             beganChanges = true
             task.title = title.trimmingCharacters(in: .whitespacesAndNewlines)
             task.category = category
+            if task.startTime != startTime || task.effectiveReminderOffsets != ReminderPolicy.normalized(reminderOffsets) {
+                task.snoozedUntil = nil
+                task.snoozedStartTime = nil
+            }
+            if task.seriesID != nil && task.effectiveReminderOffsets != ReminderPolicy.normalized(reminderOffsets) {
+                task.reminderOverride = true
+            }
+            task.reminderOffsets = ReminderPolicy.normalized(reminderOffsets)
             task.startTime = startTime
             task.notes = notes
             try modelContext.save()
             NotificationManager.shared.scheduleNotifications(for: task)
+            if !reminderOffsets.isEmpty && ReminderPreferences.enabled {
+                NotificationManager.shared.requestPermission()
+            }
             dismiss()
         } catch {
             if beganChanges { modelContext.rollback() }

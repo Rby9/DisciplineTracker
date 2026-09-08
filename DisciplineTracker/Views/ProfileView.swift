@@ -81,6 +81,7 @@ struct ProfileView: View {
                 profilePreview
                 nameSection
                 avatarSection
+                NotificationSettingsSections()
                 storageSection
             }
             .navigationTitle("Profile")

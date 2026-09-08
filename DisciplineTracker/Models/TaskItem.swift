@@ -27,12 +27,27 @@ class TaskItem {
     func setStatus(_ newStatus: TaskStatus) {
         isCompleted = newStatus == .completed
         skipped = newStatus == .skipped
+        if newStatus != .pending {
+            snoozedUntil = nil
+            snoozedStartTime = nil
+        }
     }
 
     // MARK: - Recurrence
 
+    var reminderOverride: Bool? = nil
+    var snoozedUntil: Date? = nil
+    var snoozedStartTime: Date? = nil
+
     var seriesID: UUID? = nil
     var originalScheduledDate: Date? = nil
+
+    // nil preserves reminders from the previous app version; [] means disabled.
+    var reminderOffsets: [Int]? = nil
+
+    var effectiveReminderOffsets: [Int] {
+        ReminderPolicy.normalized(reminderOffsets ?? ReminderPolicy.legacyOffsets)
+    }
 
     // MARK: - Initialization
 

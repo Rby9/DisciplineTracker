@@ -29,6 +29,13 @@ class TaskSeries {
     var weekdays: [Int]
     var excludedDayKeys: [String]? = nil
 
+    // nil preserves reminders from the previous app version; [] means disabled.
+    var reminderOffsets: [Int]? = nil
+
+    var effectiveReminderOffsets: [Int] {
+        ReminderPolicy.normalized(reminderOffsets ?? ReminderPolicy.legacyOffsets)
+    }
+
     // MARK: - Initialization
 
     init(
