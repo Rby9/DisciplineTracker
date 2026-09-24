@@ -15,7 +15,7 @@ Ritvara este o aplicație iOS pentru organizarea activităților, formarea rutin
 
 Swift, SwiftUI, SwiftData, UserNotifications, ActivityKit și Xcode.
 
-## Jurnal de dezvoltare — 15 zile
+## Jurnal de dezvoltare
 
 1. Am stabilit ideea aplicației și structura ecranelor.
 2. Am creat proiectul SwiftUI și modelul pentru activități.
