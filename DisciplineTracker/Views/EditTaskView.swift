@@ -126,6 +126,9 @@ struct EditTaskView: View {
             task.notes = notes
             try modelContext.save()
             NotificationManager.shared.scheduleNotifications(for: task)
+            Task {
+                await RitvaraLiveActivityManager.synchronize(context: modelContext)
+            }
             if !reminderOffsets.isEmpty && ReminderPreferences.enabled {
                 NotificationManager.shared.requestPermission()
             }

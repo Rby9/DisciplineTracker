@@ -19,12 +19,31 @@ struct AvatarPhotoEditorView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 24) {
-                Text("Move and zoom the photo inside the circle.")
+                Text("Drag the photo in any direction. Pinch or use the slider to zoom in and out.")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
 
                 cropPreview
+
+                HStack(spacing: 12) {
+                    Image(systemName: "minus.magnifyingglass")
+                        .foregroundStyle(.secondary)
+                    Slider(value: zoomBinding, in: 0.5...4)
+                    Image(systemName: "plus.magnifyingglass")
+                        .foregroundStyle(.secondary)
+                }
+                .padding(.horizontal, 28)
+
+                Button("Reset position and zoom") {
+                    withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.2)) {
+                        zoom = 1
+                        settledZoom = 1
+                        offset = .zero
+                        settledOffset = .zero
+                    }
+                }
+                .font(.subheadline)
 
                 VStack(spacing: 12) {
                     Button {
@@ -102,7 +121,7 @@ struct AvatarPhotoEditorView: View {
     private var zoomGesture: some Gesture {
         MagnificationGesture()
             .onChanged { value in
-                zoom = min(max(settledZoom * value, 1), 4)
+                zoom = min(max(settledZoom * value, 0.5), 4)
                 offset = clampedOffset(offset, zoom: zoom)
             }
             .onEnded { _ in
@@ -110,6 +129,18 @@ struct AvatarPhotoEditorView: View {
                 offset = clampedOffset(offset, zoom: zoom)
                 settledOffset = offset
             }
+    }
+
+    private var zoomBinding: Binding<CGFloat> {
+        Binding(
+            get: { zoom },
+            set: { value in
+                zoom = value
+                settledZoom = value
+                offset = clampedOffset(offset, zoom: value)
+                settledOffset = offset
+            }
+        )
     }
 
     private func clampedOffset(_ proposed: CGSize, zoom: CGFloat) -> CGSize {
@@ -121,8 +152,8 @@ struct AvatarPhotoEditorView: View {
             baseSize = CGSize(width: viewport, height: viewport / imageRatio)
         }
 
-        let horizontalLimit = max((baseSize.width * zoom - viewport) / 2, 0)
-        let verticalLimit = max((baseSize.height * zoom - viewport) / 2, 0)
+        let horizontalLimit = max(abs(baseSize.width * zoom - viewport) / 2, 24)
+        let verticalLimit = max(abs(baseSize.height * zoom - viewport) / 2, 24)
         return CGSize(
             width: min(max(proposed.width, -horizontalLimit), horizontalLimit),
             height: min(max(proposed.height, -verticalLimit), verticalLimit)

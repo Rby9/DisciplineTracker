@@ -3,6 +3,18 @@ import SwiftData
 import Foundation
 
 struct ConvertTaskToRoutineView: View {
+    private enum RepeatPattern: String, CaseIterable, Identifiable {
+        case daily, weekdays, interval
+        var id: Self { self }
+        var title: LocalizedStringResource {
+            switch self {
+            case .daily: "Daily"
+            case .weekdays: "Selected days"
+            case .interval: "Every N days"
+            }
+        }
+    }
+
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     let task: TaskItem
@@ -12,7 +24,8 @@ struct ConvertTaskToRoutineView: View {
     @State private var lastDay: Date
     @State private var reminderOffsets: [Int]
     @State private var months = 3
-    @State private var everyDay = true
+    @State private var repeatPattern = RepeatPattern.daily
+    @State private var intervalDays = 2
     @State private var weekdays: Set<Int> = [2, 3, 4, 5, 6]
     @State private var showError = false
     @State private var errorMessage = ""
@@ -27,7 +40,10 @@ struct ConvertTaskToRoutineView: View {
         _lastDay = State(initialValue: RecurrenceSchedule.lastDay(starting: first, months: 3))
     }
 
-    private var activeWeekdays: Set<Int> { everyDay ? Set(1...7) : weekdays }
+    private var activeWeekdays: Set<Int> {
+        repeatPattern == .daily ? Set(1...7) : weekdays
+    }
+    private var activeInterval: Int? { repeatPattern == .interval ? intervalDays : nil }
     private var endDate: Date {
         months == 0 ? lastDay : RecurrenceSchedule.lastDay(starting: firstDay, months: months)
     }
@@ -41,7 +57,7 @@ struct ConvertTaskToRoutineView: View {
                     LabeledContent("Date & time") {
                         Text(task.startTime, format: .dateTime.day().month(.abbreviated).hour().minute())
                     }
-                    Label(task.status.rawValue, systemImage: task.status.symbol)
+                    Label(LocalizedStringKey(task.status.rawValue), systemImage: task.status.symbol)
                         .foregroundStyle(task.status.color)
                 }
                 Section {
@@ -49,8 +65,13 @@ struct ConvertTaskToRoutineView: View {
                                in: Calendar.current.startOfDay(for: Date())...,
                                displayedComponents: .date)
                     DatePicker("Routine time", selection: $time, displayedComponents: .hourAndMinute)
-                    Toggle("Every day", isOn: $everyDay)
-                    if !everyDay {
+                    Picker("Frequency", selection: $repeatPattern) {
+                        ForEach(RepeatPattern.allCases) { pattern in
+                            Text(pattern.title).tag(pattern)
+                        }
+                    }
+
+                    if repeatPattern == .weekdays {
                         ForEach([2, 3, 4, 5, 6, 7, 1], id: \.self) { day in
                             Toggle(Calendar.current.weekdaySymbols[day - 1], isOn: Binding(
                                 get: { weekdays.contains(day) },
@@ -58,6 +79,10 @@ struct ConvertTaskToRoutineView: View {
                                     if enabled { weekdays.insert(day) } else { weekdays.remove(day) }
                                 }
                             ))
+                        }
+                    } else if repeatPattern == .interval {
+                        Stepper(value: $intervalDays, in: 2...30) {
+                            LabeledContent("Repeat interval", value: "Every \(intervalDays) days")
                         }
                     }
                 } header: { Text("Future schedule") } footer: { Text("The original task keeps its date, time and status. Only future occurrences are added, with at most one new occurrence per day. Its original day is never duplicated.") }
@@ -119,7 +144,8 @@ struct ConvertTaskToRoutineView: View {
         return try RecurrenceSchedule.dates(
             from: firstDay, through: endDate,
             hour: clock.hour ?? 0, minute: clock.minute ?? 0,
-            weekdays: activeWeekdays, after: now, excludingDay: task.startTime
+            weekdays: activeWeekdays, intervalDays: activeInterval,
+            after: now, excludingDay: task.startTime
         )
     }
 
@@ -132,7 +158,8 @@ struct ConvertTaskToRoutineView: View {
             try RoutineConversion.create(
                 for: task, firstDay: firstDay, lastDay: endDate,
                 hour: clock.hour ?? 0, minute: clock.minute ?? 0,
-                weekdays: activeWeekdays, in: modelContext, reminderOffsets: reminderOffsets
+                weekdays: activeWeekdays, intervalDays: activeInterval,
+                in: modelContext, reminderOffsets: reminderOffsets
             )
             NotificationManager.shared.refreshNotifications()
             if !reminderOffsets.isEmpty && ReminderPreferences.enabled {

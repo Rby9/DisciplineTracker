@@ -14,6 +14,20 @@ struct RoutineStreakSummary: Equatable {
     )
 }
 
+enum RoutineOccurrenceState: Equatable {
+    case completed
+    case missed
+    case paused
+    case upcoming
+}
+
+struct RoutineOccurrence: Identifiable, Equatable {
+    let date: Date
+    let state: RoutineOccurrenceState
+
+    var id: Date { date }
+}
+
 enum RoutineStreakCalculator {
     static func summary(
         for routine: TaskSeries,
@@ -27,6 +41,7 @@ enum RoutineStreakCalculator {
             hour: routine.hour,
             minute: routine.minute,
             weekdays: Set(routine.weekdays),
+            intervalDays: routine.repeatIntervalDays,
             calendar: calendar
         ) else {
             return .empty
@@ -62,5 +77,56 @@ enum RoutineStreakCalculator {
             completedOccurrences: completed,
             dueOccurrences: dueDates.count
         )
+    }
+
+    static func history(
+        for routine: TaskSeries,
+        tasks: [TaskItem],
+        limit: Int = 28,
+        now: Date = .now,
+        calendar: Calendar = .current
+    ) -> [RoutineOccurrence] {
+        let lastDay = min(routine.endDate, now)
+        guard limit > 0,
+              let dates = try? RecurrenceSchedule.dates(
+                from: routine.startDate,
+                through: lastDay,
+                hour: routine.hour,
+                minute: routine.minute,
+                weekdays: Set(routine.weekdays),
+                intervalDays: routine.repeatIntervalDays,
+                calendar: calendar
+              ) else {
+            return []
+        }
+
+        let excludedKeys = Set(routine.excludedDayKeys ?? [])
+        let routineTasks = tasks.filter { $0.seriesID == routine.id }
+        let tasksByKey = Dictionary(
+            routineTasks.map {
+                (
+                    JournalEntry.key(for: $0.originalScheduledDate ?? $0.startTime),
+                    $0
+                )
+            },
+            uniquingKeysWith: { first, _ in first }
+        )
+
+        return dates.suffix(limit).map { date in
+            let key = JournalEntry.key(for: date)
+            let state: RoutineOccurrenceState
+
+            if excludedKeys.contains(key) {
+                state = .paused
+            } else if date > now {
+                state = .upcoming
+            } else if tasksByKey[key]?.isCompleted == true {
+                state = .completed
+            } else {
+                state = .missed
+            }
+
+            return RoutineOccurrence(date: date, state: state)
+        }
     }
 }

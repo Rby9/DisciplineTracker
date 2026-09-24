@@ -29,15 +29,28 @@ struct WeeklyView: View {
     @State private var showSkipped = false
     @State private var showInsights = false
 
-    private let accent = Color(hex: "8B7CFF")
-    private let surface = Color(hex: "161426")
-    private let border = Color(hex: "2E2A4D")
+    private var accent: Color { AppTheme.accent }
+    private var surface: Color { AppTheme.surface }
+    private var border: Color { AppTheme.border }
 
     private enum AgendaFilter: String, CaseIterable {
         case all = "All"
         case pending = "Pending"
         case completed = "Completed"
         case skipped = "Skipped"
+
+        var title: LocalizedStringKey {
+            switch self {
+            case .all:
+                "All tasks"
+            case .pending:
+                "Pending tasks"
+            case .completed:
+                "Completed tasks"
+            case .skipped:
+                "Skipped tasks"
+            }
+        }
     }
 
     // MARK: - Calendar
@@ -139,7 +152,7 @@ struct WeeklyView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color(hex: "0D0B16")
+                AppTheme.background
                     .ignoresSafeArea()
 
                 ScrollView {
@@ -247,7 +260,7 @@ struct WeeklyView: View {
 
     private func weekArrow(
         icon: String,
-        label: String,
+        label: LocalizedStringKey,
         direction: Int
     ) -> some View {
         Button {
@@ -261,7 +274,7 @@ struct WeeklyView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 13))
         }
         .buttonStyle(.plain)
-        .accessibilityLabel(label)
+        .accessibilityLabel(Text(label))
     }
 
     // MARK: - Progress
@@ -447,7 +460,7 @@ struct WeeklyView: View {
                 Button {
                     selectedFilter = filter
                 } label: {
-                    Text(filter.rawValue)
+                    Text(filter.title)
                         .font(.system(size: 12, weight: .semibold))
                         .foregroundStyle(
                             selectedFilter == filter
@@ -662,8 +675,8 @@ struct WeeklyView: View {
 
     private func emptyMessage(
         icon: String,
-        title: String,
-        subtitle: String
+        title: LocalizedStringKey,
+        subtitle: LocalizedStringKey
     ) -> some View {
         VStack(spacing: 10) {
             Image(systemName: icon)
@@ -697,7 +710,7 @@ struct WeeklyView: View {
                 .tint(accent)
                 .padding(16)
             }
-            .background(Color(hex: "0D0B16"))
+            .background(AppTheme.background)
             .navigationTitle("Choose a date")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

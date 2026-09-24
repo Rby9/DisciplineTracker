@@ -4,6 +4,8 @@ import Foundation
 
 struct AddTaskView: View {
 
+    private let isDuplicate: Bool
+
     // MARK: - Environment
 
     @Environment(\.modelContext) private var modelContext
@@ -30,7 +32,7 @@ struct AddTaskView: View {
     @State private var showError = false
     @State private var errorMessage = ""
 
-    private let accent = Color(hex: "8B7CFF")
+    private var accent: Color { AppTheme.accent }
 
     private var calendar: Calendar {
         Calendar.current
@@ -38,10 +40,21 @@ struct AddTaskView: View {
 
     // MARK: - Options
 
-    private enum RepeatOption: String, CaseIterable {
-        case never = "Does not repeat"
-        case daily = "Every day"
-        case selectedDays = "Selected weekdays"
+    private enum RepeatOption: CaseIterable {
+        case never
+        case daily
+        case selectedDays
+
+        var title: LocalizedStringKey {
+            switch self {
+            case .never:
+                "Does not repeat"
+            case .daily:
+                "Every day"
+            case .selectedDays:
+                "Selected weekdays"
+            }
+        }
     }
 
     private enum RoutineDuration: String, CaseIterable {
@@ -92,7 +105,7 @@ struct AddTaskView: View {
 
     // MARK: - Initialization
 
-    init(selectedDate: Date) {
+    init(selectedDate: Date, copying template: TaskItem? = nil) {
         let calendar = Calendar.current
         let now = Date()
 
@@ -109,6 +122,14 @@ struct AddTaskView: View {
         ) ?? selectedDate
 
         _startTime = State(initialValue: initialDate)
+        if let template {
+            _startTime = State(initialValue: initialDate.addingTimeInterval(3600))
+            _title = State(initialValue: template.title)
+            _category = State(initialValue: template.category)
+            _notes = State(initialValue: template.notes)
+            _reminderOffsets = State(initialValue: template.effectiveReminderOffsets)
+        }
+        isDuplicate = template != nil
 
         _customEndDate = State(
             initialValue: calendar.date(
@@ -173,6 +194,12 @@ struct AddTaskView: View {
     var body: some View {
         NavigationStack {
             AppForm {
+                if isDuplicate {
+                    Section {
+                        Text("This is a new, separate activity. Choose its date and time before saving. The original stays unchanged.")
+                            .font(.footnote).foregroundStyle(.secondary)
+                    }
+                }
                 taskSection
                 repeatSection
 
@@ -229,7 +256,7 @@ struct AddTaskView: View {
         Section {
             Picker("Repeat", selection: $repeatOption) {
                 ForEach(RepeatOption.allCases, id: \.self) { option in
-                    Text(option.rawValue)
+                    Text(option.title)
                         .tag(option)
                 }
             }
@@ -301,7 +328,7 @@ struct AddTaskView: View {
         Section("Duration") {
             Picker("Repeat for", selection: $duration) {
                 ForEach(RoutineDuration.allCases, id: \.self) { option in
-                    Text(option.rawValue)
+                    Text(LocalizedStringKey(option.rawValue))
                         .tag(option)
                 }
             }
@@ -461,6 +488,9 @@ struct AddTaskView: View {
             try modelContext.save()
 
             NotificationManager.shared.refreshNotifications()
+            Task {
+                await RitvaraLiveActivityManager.synchronize(context: modelContext)
+            }
             if !reminderOffsets.isEmpty && ReminderPreferences.enabled {
                 NotificationManager.shared.requestPermission()
             }

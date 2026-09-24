@@ -75,7 +75,7 @@ struct TasksHeader: View {
                     height: 36
                 )
                 .background(
-                    Color(hex: "8B7CFF")
+                    AppTheme.accent
                 )
                 .clipShape(Circle())
         }

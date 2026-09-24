@@ -15,14 +15,17 @@ struct MainView: View {
     @State private var weeklySelectedDate = Date()
     @State private var activeSheet: MainSheet?
 
-    private let backgroundColor = Color(hex: "0D0B16")
+    private var backgroundColor: Color { AppTheme.background }
 
     private enum MainSheet: Identifiable {
+        case search
         case routines
         case journal(Date)
 
         var id: String {
             switch self {
+            case .search:
+                return "search"
             case .routines:
                 return "routines"
             case .journal(let date):
@@ -64,6 +67,8 @@ struct MainView: View {
         )
         .sheet(item: $activeSheet) { sheet in
             switch sheet {
+            case .search:
+                TaskSearchView()
             case .routines:
                 RoutinesView()
 
@@ -80,6 +85,7 @@ struct MainView: View {
             backgroundColor
             todayPage
             weeklyPage
+            goalsPage
         }
         .background(backgroundColor)
     }
@@ -98,7 +104,7 @@ struct MainView: View {
     }
 
     private var weeklyPage: some View {
-        WeeklyView(selectedDate: $weeklySelectedDate)
+        WeeklyPlanView(selectedDate: $weeklySelectedDate)
             .background(backgroundColor)
             .preferredColorScheme(.dark)
             .opacity(selectedTab == .weekly ? 1 : 0)
@@ -110,10 +116,35 @@ struct MainView: View {
             .zIndex(selectedTab == .weekly ? 1 : 0)
     }
 
+    private var goalsPage: some View {
+        GoalsView()
+            .background(backgroundColor)
+            .preferredColorScheme(.dark)
+            .opacity(selectedTab == .goals ? 1 : 0)
+            .offset(x: reduceMotion || selectedTab == .goals ? 0 : 24)
+            .allowsHitTesting(selectedTab == .goals)
+            .accessibilityHidden(selectedTab != .goals)
+            .zIndex(selectedTab == .goals ? 1 : 0)
+    }
+
     // MARK: - Shortcuts
 
     private var shortcuts: some View {
         HStack(spacing: 8) {
+            Button {
+                activeSheet = .search
+            } label: {
+                Image(systemName: "magnifyingglass")
+                    .font(.system(size: 17, weight: .semibold))
+                    .foregroundStyle(AppTheme.accent)
+                    .frame(width: 44, height: 44)
+                    .background(AppTheme.surface)
+                    .clipShape(RoundedRectangle(cornerRadius: 13))
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("Search")
+
             shortcutButton(
                 title: "Journal",
                 icon: "book.closed"
@@ -137,6 +168,9 @@ struct MainView: View {
         }
         .padding(.horizontal, 20)
         .padding(.top, 6)
+        .frame(height: selectedTab == .goals ? 0 : nil)
+        .opacity(selectedTab == .goals ? 0 : 1)
+        .allowsHitTesting(selectedTab != .goals)
     }
 
     private func shortcutButton(
@@ -149,7 +183,7 @@ struct MainView: View {
                 Image(systemName: icon)
                     .font(.system(size: 14, weight: .semibold))
 
-                Text(title)
+                Text(LocalizedStringKey(title))
                     .font(.system(size: 13, weight: .semibold))
 
                 Spacer()
@@ -157,11 +191,11 @@ struct MainView: View {
                 Image(systemName: "chevron.right")
                     .font(.system(size: 10, weight: .bold))
             }
-            .foregroundStyle(Color(hex: "8B7CFF"))
+            .foregroundStyle(AppTheme.accent)
             .padding(.horizontal, 14)
             .frame(maxWidth: .infinity)
-            .frame(height: 40)
-            .background(Color(hex: "161426"))
+            .frame(minHeight: 44)
+            .background(AppTheme.surface)
             .clipShape(RoundedRectangle(cornerRadius: 13))
             .contentShape(Rectangle())
         }

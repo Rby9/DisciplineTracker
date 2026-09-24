@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 struct DashboardHeader: View {
 
@@ -6,8 +7,13 @@ struct DashboardHeader: View {
 
     @State private var showProfile = false
 
-    @AppStorage("profile.symbol")
-    private var profileSymbol = "person.fill"
+    @AppStorage("profile.avatarRevision")
+    private var avatarRevision = 0
+
+    @AppStorage("profile.photoContentMode")
+    private var photoContentMode = "crop"
+
+    @State private var profilePhoto: UIImage?
 
     // MARK: - Body
 
@@ -25,12 +31,15 @@ struct DashboardHeader: View {
         .sheet(isPresented: $showProfile) {
             ProfileView()
         }
+        .task(id: avatarRevision) {
+            profilePhoto = ProfileAvatarStore.load()
+        }
     }
 
     // MARK: - Title
 
     private var title: some View {
-        Text("DisciplineTracker")
+        Text("Ritvara")
             .font(.system(size: 24, weight: .bold))
             .foregroundStyle(.white)
     }
@@ -41,18 +50,25 @@ struct DashboardHeader: View {
         Button {
             showProfile = true
         } label: {
-            Image(systemName: profileSymbol)
-                .font(.system(size: 17, weight: .semibold))
-                .foregroundStyle(AppTheme.accent)
-                .frame(width: 44, height: 44)
-                .background(AppTheme.surface, in: Circle())
-                .overlay {
-                    Circle()
-                        .stroke(
-                            AppTheme.border,
-                            lineWidth: 2
-                        )
+            ZStack {
+                Circle().fill(AppTheme.surface)
+
+                if let profilePhoto {
+                    Image(uiImage: profilePhoto)
+                        .resizable()
+                        .aspectRatio(contentMode: photoContentMode == "original" ? .fit : .fill)
+                } else {
+                    Image(systemName: "person.crop.circle.badge.plus")
+                        .font(.system(size: 20, weight: .semibold))
+                        .foregroundStyle(AppTheme.accent)
                 }
+            }
+            .frame(width: 44, height: 44)
+            .clipShape(Circle())
+            .overlay {
+                Circle()
+                    .stroke(AppTheme.border, lineWidth: 2)
+            }
         }
         .buttonStyle(.plain)
         .accessibilityLabel("Open profile")

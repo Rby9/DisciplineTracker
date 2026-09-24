@@ -115,8 +115,8 @@ struct DateStripView: View {
             )
             .background(
                 isSelected(date)
-                    ? Color(hex: "8B7CFF")
-                    : Color(hex: "161426")
+                    ? AppTheme.accent
+                    : AppTheme.surface
             )
             .clipShape(
                 RoundedRectangle(
@@ -129,8 +129,8 @@ struct DateStripView: View {
                 )
                 .stroke(
                     isSelected(date)
-                        ? Color(hex: "A99EFF")
-                        : Color(hex: "2E2A4D"),
+                        ? Color.white.opacity(0.65)
+                        : AppTheme.border,
                     lineWidth: 1.5
                 )
             }
@@ -191,7 +191,7 @@ struct DateStripView: View {
             .foregroundStyle(
                 isSelected(date)
                     ? .white
-                    : Color(hex: "8B7CFF")
+                    : AppTheme.accent
             )
             
             progressBar(for: dayProgress)
@@ -215,6 +215,13 @@ struct DateStripView: View {
         for progress: Double
     ) -> some View {
         GeometryReader { geometry in
+            let safeProgress = progress.isFinite
+                ? min(max(progress, 0), 1)
+                : 0
+            let safeWidth = geometry.size.width.isFinite
+                ? max(geometry.size.width, 0)
+                : 0
+
             ZStack(alignment: .leading) {
                 Capsule()
                     .fill(
@@ -223,10 +230,10 @@ struct DateStripView: View {
                 
                 Capsule()
                     .fill(
-                        Color(hex: "8B7CFF")
+                        AppTheme.accent
                     )
                     .frame(
-                        width: geometry.size.width * progress
+                        width: safeWidth * safeProgress
                     )
             }
         }

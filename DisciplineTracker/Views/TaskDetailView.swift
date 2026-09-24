@@ -17,6 +17,7 @@ struct TaskDetailView: View {
 
     @State private var currentTime = Date()
     @State private var isEditing = false
+    @State private var isDuplicating = false
     @State private var isConverting = false
     @State private var showDeleteConfirmation = false
 
@@ -26,24 +27,26 @@ struct TaskDetailView: View {
     @State private var showError = false
     @State private var errorMessage = ""
 
-    private let accent = Color(hex: "8B7CFF")
+    private var accent: Color { AppTheme.accent }
 
     // MARK: - Computed Properties
 
     private var estimatedTimeRemaining: String {
-        if task.isSkipped { return "Skipped" }
+        if task.isSkipped { return String(localized: "Skipped") }
         if task.isCompleted {
-            return "Completed"
+            return String(localized: "Completed")
         }
 
         let secondsRemaining =
             task.startTime.timeIntervalSince(currentTime)
 
         if secondsRemaining <= 0 {
-            return "Overdue by \(formatTime(abs(secondsRemaining)))"
+            let overdue = formatTime(abs(secondsRemaining))
+            return String(localized: "Overdue by \(overdue)")
         }
 
-        return "Starts in \(formatTime(secondsRemaining))"
+        let remaining = formatTime(secondsRemaining)
+        return String(localized: "Starts in \(remaining)")
     }
 
     private var statusColor: Color {
@@ -92,6 +95,11 @@ struct TaskDetailView: View {
                     Text("Keep this task and plan future occurrences of a routine.")
                 }
             }
+            Section {
+                Button { isDuplicating = true } label: {
+                    Label("Duplicate activity", systemImage: "plus.square.on.square")
+                }
+            }
             deleteSection
         }
         .navigationTitle("Task Details")
@@ -102,6 +110,9 @@ struct TaskDetailView: View {
         }
         .sheet(isPresented: $isConverting) {
             ConvertTaskToRoutineView(task: task)
+        }
+        .sheet(isPresented: $isDuplicating) {
+            AddTaskView(selectedDate: Date(), copying: task)
         }
         .sheet(isPresented: $isEditing) {
             EditTaskView(task: task)
@@ -188,7 +199,8 @@ struct TaskDetailView: View {
                 set: { updateStatus($0) }
             )) {
                 ForEach(TaskStatus.allCases) { status in
-                    Label(status.rawValue, systemImage: status.symbol).tag(status)
+                    Label(LocalizedStringKey(status.rawValue), systemImage: status.symbol)
+                        .tag(status)
                 }
             }
         } footer: {
@@ -365,6 +377,9 @@ struct TaskDetailView: View {
 
             NotificationManager.shared
                 .scheduleNotifications(for: task)
+            Task {
+                await RitvaraLiveActivityManager.synchronize(context: modelContext)
+            }
 
         } catch {
             task.startTime = oldDate
@@ -397,6 +412,9 @@ struct TaskDetailView: View {
 
             NotificationManager.shared
                 .scheduleNotifications(for: task)
+            Task {
+                await RitvaraLiveActivityManager.synchronize(context: modelContext)
+            }
 
         } catch {
             task.startTime = currentDate
@@ -431,6 +449,9 @@ struct TaskDetailView: View {
             modelContext.delete(task)
             try modelContext.save()
             NotificationManager.shared.refreshNotifications()
+            Task {
+                await RitvaraLiveActivityManager.synchronize(context: modelContext)
+            }
             dismiss()
         } catch {
             if beganChanges { modelContext.rollback() }

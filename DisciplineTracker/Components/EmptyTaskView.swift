@@ -27,7 +27,7 @@ struct EmptyTaskView: View {
         Image(systemName: "checkmark.circle")
             .font(.system(size: 40))
             .foregroundStyle(
-                Color(hex: "8B7CFF")
+                AppTheme.accent
             )
     }
     

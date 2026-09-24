@@ -61,6 +61,21 @@ enum JournalMood: String, CaseIterable {
     case good = "Good"
     case great = "Great"
 
+    var title: LocalizedStringResource {
+        switch self {
+        case .low:
+            "Low"
+        case .tired:
+            "Tired"
+        case .okay:
+            "Okay"
+        case .good:
+            "Good"
+        case .great:
+            "Great"
+        }
+    }
+
     var emoji: String {
         switch self {
         case .low:

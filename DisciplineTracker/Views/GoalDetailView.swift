@@ -92,10 +92,10 @@ private struct GoalDetailHero: View {
     var body: some View {
         VStack(spacing: 16) {
             ZStack {
-                Circle().stroke(Color(hex: "2E2A4D"), lineWidth: 14)
+                Circle().stroke(AppTheme.border, lineWidth: 14)
                 Circle()
                     .trim(from: 0, to: revealed ? progress : 0)
-                    .stroke(Color(hex: "8B7CFF"), style: StrokeStyle(lineWidth: 14, lineCap: .round))
+                    .stroke(AppTheme.accent, style: StrokeStyle(lineWidth: 14, lineCap: .round))
                     .rotationEffect(.degrees(-90))
                 VStack(spacing: 3) {
                     Text("\(Int((progress * 100).rounded()))%")
@@ -115,17 +115,17 @@ private struct GoalDetailHero: View {
             if progress >= 1 {
                 Label("Goal achieved", systemImage: "sparkles")
                     .font(.headline)
-                    .foregroundStyle(Color(hex: "8B7CFF"))
+                    .foregroundStyle(AppTheme.accent)
             }
         }
         .frame(maxWidth: .infinity)
         .padding(22)
-        .background(Color(hex: "161426"), in: RoundedRectangle(cornerRadius: 24))
+        .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: 24))
         .overlay {
             RoundedRectangle(cornerRadius: 24)
-                .stroke(progress >= 1 ? Color(hex: "8B7CFF") : Color(hex: "2E2A4D"), lineWidth: progress >= 1 ? 2 : 1)
+                .stroke(progress >= 1 ? AppTheme.accent : AppTheme.border, lineWidth: progress >= 1 ? 2 : 1)
         }
-        .shadow(color: progress >= 1 ? Color(hex: "8B7CFF").opacity(0.25) : .clear, radius: 22)
+        .shadow(color: progress >= 1 ? AppTheme.accent.opacity(0.25) : .clear, radius: 22)
         .onAppear {
             if reduceMotion {
                 revealed = true
@@ -159,7 +159,7 @@ private struct GoalStatistic: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Image(systemName: icon).foregroundStyle(Color(hex: "8B7CFF"))
+            Image(systemName: icon).foregroundStyle(AppTheme.accent)
             Text("\(value)")
                 .font(.title.bold())
                 .monospacedDigit()
@@ -168,8 +168,8 @@ private struct GoalStatistic: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(16)
-        .background(Color(hex: "161426"), in: RoundedRectangle(cornerRadius: 18))
-        .overlay { RoundedRectangle(cornerRadius: 18).stroke(Color(hex: "2E2A4D"), lineWidth: 1) }
+        .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: 18))
+        .overlay { RoundedRectangle(cornerRadius: 18).stroke(AppTheme.border, lineWidth: 1) }
     }
 }
 
@@ -183,7 +183,7 @@ private struct GoalComparisonCard: View {
         HStack(spacing: 14) {
             Image(systemName: difference >= 0 ? "arrow.up.right" : "arrow.down.right")
                 .font(.title2.bold())
-                .foregroundStyle(difference >= 0 ? Color(hex: "8B7CFF") : .orange)
+                .foregroundStyle(difference >= 0 ? AppTheme.accent : .orange)
             VStack(alignment: .leading, spacing: 4) {
                 Text("Compared with the previous period").font(.headline)
                 if difference == 0 {
@@ -199,8 +199,8 @@ private struct GoalComparisonCard: View {
             Spacer()
         }
         .padding(18)
-        .background(Color(hex: "161426"), in: RoundedRectangle(cornerRadius: 18))
-        .overlay { RoundedRectangle(cornerRadius: 18).stroke(Color(hex: "2E2A4D"), lineWidth: 1) }
+        .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: 18))
+        .overlay { RoundedRectangle(cornerRadius: 18).stroke(AppTheme.border, lineWidth: 1) }
     }
 }
 
@@ -219,7 +219,7 @@ private struct GoalDetailedChart: View {
                     let height = max(8, 92 * CGFloat(day.count) / CGFloat(maximum))
                     VStack(spacing: 5) {
                         Capsule()
-                            .fill(day.count > 0 ? Color(hex: "8B7CFF") : Color(hex: "2E2A4D"))
+                            .fill(day.count > 0 ? AppTheme.accent : AppTheme.border)
                             .frame(maxWidth: .infinity)
                             .frame(height: revealed || reduceMotion ? height : 8)
                         if days.count <= 7 {
@@ -236,8 +236,8 @@ private struct GoalDetailedChart: View {
             .frame(height: 112, alignment: .bottom)
         }
         .padding(18)
-        .background(Color(hex: "161426"), in: RoundedRectangle(cornerRadius: 18))
-        .overlay { RoundedRectangle(cornerRadius: 18).stroke(Color(hex: "2E2A4D"), lineWidth: 1) }
+        .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: 18))
+        .overlay { RoundedRectangle(cornerRadius: 18).stroke(AppTheme.border, lineWidth: 1) }
         .onAppear {
             if reduceMotion {
                 revealed = true
@@ -266,7 +266,7 @@ private struct GoalCompletedActivities: View {
                 ForEach(recentTasks) { task in
                     HStack(spacing: 12) {
                         Image(systemName: "checkmark.circle.fill")
-                            .foregroundStyle(Color(hex: "8B7CFF"))
+                            .foregroundStyle(AppTheme.accent)
                         VStack(alignment: .leading, spacing: 3) {
                             Text(task.title).font(.subheadline.weight(.semibold))
                             Text(task.startTime, format: .dateTime.day().month(.abbreviated).hour().minute())
@@ -280,8 +280,8 @@ private struct GoalCompletedActivities: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(18)
-        .background(Color(hex: "161426"), in: RoundedRectangle(cornerRadius: 18))
-        .overlay { RoundedRectangle(cornerRadius: 18).stroke(Color(hex: "2E2A4D"), lineWidth: 1) }
+        .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: 18))
+        .overlay { RoundedRectangle(cornerRadius: 18).stroke(AppTheme.border, lineWidth: 1) }
     }
 }
 

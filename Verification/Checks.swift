@@ -154,6 +154,7 @@ struct Checks {
                    "Disabled reminders persist as an empty array, not legacy defaults")
         try expect(savedRoutine?.effectiveReminderOffsets == [30, 5], "Routine reminders persist")
         print("PASS: conversion identity, no duplicates, status exclusivity and persistence")
+        try BackupChecks.run(in: context)
         print("All native checks passed.")
     }
 }

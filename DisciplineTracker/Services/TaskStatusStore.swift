@@ -15,6 +15,10 @@ enum TaskStatusStore {
             task.snoozedStartTime = oldSnoozeStart
             throw error
         }
-        NotificationManager.shared.scheduleNotifications(for: task)
+        Task {
+            await Task.yield()
+            NotificationManager.shared.scheduleNotifications(for: task)
+            await RitvaraLiveActivityManager.synchronize(context: context)
+        }
     }
 }

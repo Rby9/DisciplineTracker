@@ -27,6 +27,8 @@ class TaskSeries {
 
     // Calendar weekdays: Sunday = 1, Monday = 2, ...
     var weekdays: [Int]
+    // nil keeps the legacy weekday schedule. A value repeats from startDate every N calendar days.
+    var repeatIntervalDays: Int? = nil
     var excludedDayKeys: [String]? = nil
 
     // nil preserves reminders from the previous app version; [] means disabled.

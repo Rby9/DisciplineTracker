@@ -9,11 +9,6 @@ struct JournalView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
 
-    // MARK: - Data
-
-    @Query private var entries: [JournalEntry]
-    @Query private var tasks: [TaskItem]
-
     // MARK: - Editor State
 
     @State private var selectedDate: Date
@@ -23,6 +18,7 @@ struct JournalView: View {
     @State private var loadedNote = ""
     @State private var loadedMood: JournalMood?
     @State private var hasLoaded = false
+    @State private var dayTaskSummary = DayTaskSummary()
 
     // MARK: - Calendar State
 
@@ -41,7 +37,7 @@ struct JournalView: View {
     @State private var errorMessage = ""
     @State private var savedMessage = false
 
-    private let accent = Color(hex: "8B7CFF")
+    private var accent: Color { AppTheme.accent }
 
     // MARK: - Initialization
 
@@ -51,19 +47,6 @@ struct JournalView: View {
     }
 
     // MARK: - Computed Properties
-
-    private var dayTasks: [TaskItem] {
-        tasks.filter {
-            Calendar.current.isDate(
-                $0.startTime,
-                inSameDayAs: selectedDate
-            )
-        }
-    }
-
-    private var completedCount: Int {
-        dayTasks.filter { $0.isCompleted }.count
-    }
 
     private var isDirty: Bool {
         note != loadedNote || selectedMood != loadedMood
@@ -90,7 +73,7 @@ struct JournalView: View {
                 }
             }
             .scrollContentBackground(.hidden)
-            .background(Color(hex: "0D0B16"))
+            .background(AppTheme.background)
             .navigationTitle("Journal")
             .navigationBarTitleDisplayMode(.inline)
             .tint(accent)
@@ -206,7 +189,7 @@ struct JournalView: View {
                 .tint(accent)
                 .padding(16)
             }
-            .background(Color(hex: "0D0B16"))
+            .background(AppTheme.background)
             .navigationTitle("Choose a day")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -233,10 +216,10 @@ struct JournalView: View {
     private var taskSummary: some View {
         Section {
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 18) {
-                summaryValue("\(dayTasks.count)", label: "Planned")
-                summaryValue("\(completedCount)", label: "Completed")
-                summaryValue("\(dayTasks.filter { $0.isPending }.count)", label: "Pending")
-                summaryValue("\(dayTasks.filter { $0.isSkipped }.count)", label: "Skipped")
+                summaryValue("\(dayTaskSummary.total)", label: "Planned tasks")
+                summaryValue("\(dayTaskSummary.completed)", label: "Completed tasks")
+                summaryValue("\(dayTaskSummary.pending)", label: "Pending tasks")
+                summaryValue("\(dayTaskSummary.skipped)", label: "Skipped tasks")
             }
             .padding(.vertical, 6)
         } header: {
@@ -258,7 +241,7 @@ struct JournalView: View {
                 .monospacedDigit()
                 .foregroundStyle(accent)
 
-            Text(label)
+            Text(LocalizedStringKey(label))
                 .font(.system(size: 11))
                 .foregroundStyle(.secondary)
         }
@@ -291,7 +274,7 @@ struct JournalView: View {
                 Text(mood.emoji)
                     .font(.system(size: 27))
 
-                Text(mood.rawValue)
+                Text(mood.title)
                     .font(.system(size: 10, weight: .medium))
                     .foregroundStyle(selected ? .white : .secondary)
                     .lineLimit(1)
@@ -306,7 +289,7 @@ struct JournalView: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .accessibilityLabel(mood.rawValue)
+        .accessibilityLabel(Text(mood.title))
         .accessibilityAddTraits(selected ? .isSelected : [])
     }
 
@@ -377,28 +360,54 @@ struct JournalView: View {
 
     // MARK: - Loading
 
-    private func entry(for date: Date) -> JournalEntry? {
+    private func entry(for date: Date) throws -> JournalEntry? {
         let key = JournalEntry.key(for: date)
-        return entries.first { $0.dayKey == key }
+        var descriptor = FetchDescriptor<JournalEntry>(
+            predicate: #Predicate { $0.dayKey == key }
+        )
+        descriptor.fetchLimit = 1
+        return try modelContext.fetch(descriptor).first
+    }
+
+    private func taskSummary(for date: Date) throws -> DayTaskSummary {
+        let calendar = Calendar.current
+        let start = calendar.startOfDay(for: date)
+        guard let end = calendar.date(byAdding: .day, value: 1, to: start) else {
+            return DayTaskSummary()
+        }
+
+        let descriptor = FetchDescriptor<TaskItem>(
+            predicate: #Predicate {
+                $0.startTime >= start && $0.startTime < end
+            }
+        )
+        let dayTasks = try modelContext.fetch(descriptor)
+
+        return DayTaskSummary(
+            total: dayTasks.count,
+            completed: dayTasks.lazy.filter(\.isCompleted).count,
+            pending: dayTasks.lazy.filter(\.isPending).count,
+            skipped: dayTasks.lazy.filter(\.isSkipped).count
+        )
     }
 
     private func loadEntry(for date: Date) {
-        let matchingEntry = entry(for: date)
-        let entryNote = matchingEntry?.note ?? ""
+        do {
+            let matchingEntry = try entry(for: date)
+            let entryNote = matchingEntry?.note ?? ""
+            let entryMood = matchingEntry?.moodRaw.flatMap(JournalMood.init(rawValue:))
 
-        let entryMood: JournalMood?
-        if let rawMood = matchingEntry?.moodRaw {
-            entryMood = JournalMood(rawValue: rawMood)
-        } else {
-            entryMood = nil
+            selectedDate = date
+            note = entryNote
+            selectedMood = entryMood
+            loadedNote = entryNote
+            loadedMood = entryMood
+            dayTaskSummary = try taskSummary(for: date)
+            savedMessage = false
+        } catch {
+            errorMessage = error.localizedDescription
+            showError = true
         }
-
-        selectedDate = date
-        note = entryNote
-        selectedMood = entryMood
-        loadedNote = entryNote
-        loadedMood = entryMood
-        savedMessage = false
     }
 
     // MARK: - Saving
@@ -414,7 +423,7 @@ struct JournalView: View {
             try modelContext.save()
             hasStartedChanges = true
 
-            let matchingEntry = entry(for: dateToSave)
+            let matchingEntry = try entry(for: dateToSave)
 
             if cleanNote.isEmpty && selectedMood == nil {
                 if let matchingEntry {
@@ -451,4 +460,11 @@ struct JournalView: View {
             return false
         }
     }
+}
+
+private struct DayTaskSummary {
+    var total = 0
+    var completed = 0
+    var pending = 0
+    var skipped = 0
 }

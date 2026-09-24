@@ -129,7 +129,7 @@ private struct AnimatedProgressRing: View, Animatable {
     private var backgroundRing: some View {
         Circle()
             .stroke(
-                Color(hex: "2E2A4D"),
+                AppTheme.border,
                 lineWidth: 10
             )
     }
@@ -138,7 +138,7 @@ private struct AnimatedProgressRing: View, Animatable {
         Circle()
             .trim(from: 0, to: safeProgress)
             .stroke(
-                Color(hex: "8B7CFF"),
+                AppTheme.accent,
                 style: StrokeStyle(
                     lineWidth: 10,
                     lineCap: .round

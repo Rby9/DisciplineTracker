@@ -16,7 +16,8 @@ struct ContentView: View {
 
     @Binding var selectedDate: Date
 
-    @Query private var tasks: [TaskItem]
+    @Query(sort: \TaskItem.startTime, order: .forward)
+    private var tasks: [TaskItem]
 
     // MARK: - State
 
@@ -58,10 +59,24 @@ struct ContentView: View {
                 inSameDayAs: selectedDate
             )
         }
+        .sorted {
+            if $0.startTime == $1.startTime {
+                return $0.id.uuidString < $1.id.uuidString
+            }
+
+            return $0.startTime < $1.startTime
+        }
     }
 
     private var completedTasks: Int {
         selectedDayTasks.filter { $0.isCompleted }.count
+    }
+
+    private var previousDayTasks: [TaskItem] {
+        guard let previousDay = calendar.date(byAdding: .day, value: -1, to: selectedDate) else {
+            return []
+        }
+        return tasks.filter { calendar.isDate($0.startTime, inSameDayAs: previousDay) }
     }
 
     private var progress: Double {
@@ -139,6 +154,7 @@ struct ContentView: View {
                 dashboardHeader
                 progressHeader
                 dateStrip
+                dailyBriefing
                 animatedDayContent
             }
             .padding(.bottom, 30)
@@ -211,6 +227,16 @@ struct ContentView: View {
         .padding(.bottom, 28)
     }
 
+    private var dailyBriefing: some View {
+        DailyBriefingCard(
+            date: selectedDate,
+            tasks: selectedDayTasks,
+            previousDayTasks: previousDayTasks
+        )
+        .padding(.horizontal, 16)
+        .padding(.bottom, 24)
+    }
+
     // MARK: - Animated Day Content
 
     private var animatedDayContent: some View {
@@ -256,17 +282,12 @@ struct ContentView: View {
     private var taskList: some View {
         LazyVStack(spacing: 12) {
             ForEach(selectedDayTasks) { task in
-                NavigationLink {
-                    TaskDetailView(task: task)
-                } label: {
-                    TaskCardView(
-                        task: task,
-                        onToggle: {
-                            toggleTask(task)
-                        }
-                    )
-                }
-                .buttonStyle(.plain)
+                TaskCardView(
+                    task: task,
+                    onToggle: {
+                        toggleTask(task)
+                    }
+                )
                 .modifier(TaskStatusMenu(task: task))
                 .opacity(
                     appearedTaskIDs.contains(task.id)

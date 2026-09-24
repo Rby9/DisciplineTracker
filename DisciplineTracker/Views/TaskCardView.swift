@@ -29,21 +29,29 @@ struct TaskCardView: View {
             HStack(spacing: 14) {
                 completionButton
 
-                titleSection(at: context.date)
+                NavigationLink {
+                    TaskDetailView(task: task)
+                } label: {
+                    HStack(spacing: 14) {
+                        titleSection(at: context.date)
 
-                Spacer()
+                        Spacer(minLength: 8)
 
-                timeAndCategory
+                        timeAndCategory
+                    }
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
             }
             .padding(.horizontal, 6)
             .padding(.vertical, 10)
             .background(
-                Color(hex: "161426")
+                AppTheme.surface
             )
             .overlay {
                 RoundedRectangle(cornerRadius: 16)
                     .stroke(
-                        Color(hex: "2E2A4D"),
+                        AppTheme.border,
                         lineWidth: 2
                     )
             }
@@ -221,9 +229,9 @@ struct TaskCardView: View {
     }
 
     private func statusText(at date: Date) -> String {
-        if task.isSkipped { return "Skipped" }
+        if task.isSkipped { return String(localized: "Skipped") }
         if task.isCompleted {
-            return "Completed"
+            return String(localized: "Completed")
         }
 
         let secondsRemaining =
@@ -234,10 +242,11 @@ struct TaskCardView: View {
                 abs(secondsRemaining)
             )
 
-            return "Overdue by \(overdue)"
+            return String(localized: "Overdue by \(overdue)")
         }
 
-        return "Starts in \(formatTime(secondsRemaining))"
+        let remaining = formatTime(secondsRemaining)
+        return String(localized: "Starts in \(remaining)")
     }
 
     private func statusColor(at date: Date) -> Color {
@@ -250,7 +259,7 @@ struct TaskCardView: View {
             return .red.opacity(0.8)
         }
 
-        return Color(hex: "8B7CFF")
+        return AppTheme.accent
     }
 
     // MARK: - Helpers

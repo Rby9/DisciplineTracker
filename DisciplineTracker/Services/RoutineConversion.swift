@@ -16,13 +16,14 @@ enum RoutineConversion {
     @discardableResult
     static func create(
         for task: TaskItem, firstDay: Date, lastDay: Date,
-        hour: Int, minute: Int, weekdays: Set<Int>,
+        hour: Int, minute: Int, weekdays: Set<Int>, intervalDays: Int? = nil,
         in context: ModelContext, now: Date = Date(), calendar: Calendar = .current, reminderOffsets: [Int]? = nil
     ) throws -> TaskSeries {
         guard task.seriesID == nil else { throw ConversionError.alreadyRecurring }
         let dates = try RecurrenceSchedule.dates(
             from: firstDay, through: lastDay, hour: hour, minute: minute,
-            weekdays: weekdays, after: now, excludingDay: task.startTime, calendar: calendar
+            weekdays: weekdays, intervalDays: intervalDays,
+            after: now, excludingDay: task.startTime, calendar: calendar
         )
         guard !dates.isEmpty else { throw ConversionError.noFutureOccurrences }
         // Save any pre-existing edits before starting this atomic change.
@@ -35,6 +36,7 @@ enum RoutineConversion {
             )
             let offsets = ReminderPolicy.normalized(reminderOffsets ?? task.effectiveReminderOffsets)
             series.reminderOffsets = offsets
+            series.repeatIntervalDays = intervalDays
             context.insert(series)
             task.seriesID = series.id
             task.originalScheduledDate = task.startTime

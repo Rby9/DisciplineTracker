@@ -64,6 +64,7 @@ struct NotificationSettingsSections: View {
             Text("Default reminders apply only to new activities and routines. Existing activities keep their choices.")
                 .font(.footnote).foregroundStyle(.secondary)
         }
+        .onAppear { defaults = ReminderPreferences.defaultOffsets }
         .task { await manager.updateAuthorizationStatus() }
         .onChange(of: scenePhase) { _, phase in
             if phase == .active {

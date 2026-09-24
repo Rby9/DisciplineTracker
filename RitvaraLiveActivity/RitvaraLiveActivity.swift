@@ -2,7 +2,7 @@ import ActivityKit
 import SwiftUI
 import WidgetKit
 
-struct RitvaraActivityAttributes: ActivityAttributes {
+nonisolated struct RitvaraActivityAttributes: ActivityAttributes {
     struct ContentState: Codable, Hashable {
         let dailyCompleted: Int
         let dailyTotal: Int
@@ -11,6 +11,8 @@ struct RitvaraActivityAttributes: ActivityAttributes {
     let taskID: UUID
     let title: String
     let startTime: Date
+    let categoryName: String
+    let categoryColorHex: String
 }
 
 struct RitvaraLiveActivity: Widget {
@@ -21,15 +23,22 @@ struct RitvaraLiveActivity: Widget {
             LockScreenActivityView(context: context, accent: accent)
                 .activityBackgroundTint(Color(red: 22 / 255, green: 20 / 255, blue: 38 / 255))
                 .activitySystemActionForegroundColor(.white)
-                .widgetURL(URL(string: "ritvara://task/\(context.attributes.taskID.uuidString)"))
         } dynamicIsland: { context in
             DynamicIsland {
                 DynamicIslandExpandedRegion(.leading) {
-                    DailyProgressRing(completed: context.state.dailyCompleted, total: context.state.dailyTotal, accent: accent, size: 38)
+                    DailyProgressRing(
+                        completed: context.state.dailyCompleted,
+                        total: context.state.dailyTotal,
+                        accent: accent,
+                        categoryColor: categoryColor(context.attributes.categoryColorHex),
+                        size: 38
+                    )
                 }
                 DynamicIslandExpandedRegion(.center) {
                     VStack(alignment: .leading, spacing: 2) {
-                        Text(context.attributes.title).font(.headline).lineLimit(1)
+                        Text(context.attributes.title)
+                            .font(.headline)
+                            .lineLimit(1)
                         Text(context.attributes.startTime, style: .time)
                             .font(.caption)
                             .foregroundStyle(.secondary)
@@ -41,20 +50,29 @@ struct RitvaraLiveActivity: Widget {
                         .foregroundStyle(accent)
                 }
                 DynamicIslandExpandedRegion(.bottom) {
-                    ProgressView(value: Double(context.state.dailyCompleted), total: Double(max(context.state.dailyTotal, 1)))
-                        .tint(accent)
+                    VStack(alignment: .leading, spacing: 6) {
+                        Label {
+                            Text(context.attributes.categoryName)
+                        } icon: {
+                            Circle()
+                                .fill(categoryColor(context.attributes.categoryColorHex))
+                                .frame(width: 8, height: 8)
+                        }
+                        .font(.caption)
+                        ProgressView(value: Double(context.state.dailyCompleted), total: Double(max(context.state.dailyTotal, 1)))
+                            .tint(accent)
+                    }
                 }
             } compactLeading: {
-                DailyProgressRing(completed: context.state.dailyCompleted, total: context.state.dailyTotal, accent: accent, size: 22)
+                DailyProgressRing(completed: context.state.dailyCompleted, total: context.state.dailyTotal, accent: accent, categoryColor: categoryColor(context.attributes.categoryColorHex), size: 22)
             } compactTrailing: {
                 TaskCountdown(startTime: context.attributes.startTime)
                     .font(.caption.monospacedDigit())
                     .foregroundStyle(accent)
                     .frame(maxWidth: 52)
             } minimal: {
-                DailyProgressRing(completed: context.state.dailyCompleted, total: context.state.dailyTotal, accent: accent, size: 22)
+                DailyProgressRing(completed: context.state.dailyCompleted, total: context.state.dailyTotal, accent: accent, categoryColor: categoryColor(context.attributes.categoryColorHex), size: 22)
             }
-            .widgetURL(URL(string: "ritvara://task/\(context.attributes.taskID.uuidString)"))
             .keylineTint(accent)
         }
     }
@@ -66,10 +84,15 @@ private struct LockScreenActivityView: View {
 
     var body: some View {
         HStack(spacing: 14) {
-            DailyProgressRing(completed: context.state.dailyCompleted, total: context.state.dailyTotal, accent: accent, size: 48)
+            DailyProgressRing(completed: context.state.dailyCompleted, total: context.state.dailyTotal, accent: accent, categoryColor: categoryColor(context.attributes.categoryColorHex), size: 48)
             VStack(alignment: .leading, spacing: 4) {
                 Text(context.attributes.title).font(.headline).lineLimit(1)
-                Text("Ritvara • \(context.attributes.startTime, style: .time)")
+                HStack(spacing: 5) {
+                    Circle()
+                        .fill(categoryColor(context.attributes.categoryColorHex))
+                        .frame(width: 7, height: 7)
+                    Text("\(context.attributes.categoryName) • \(context.attributes.startTime, style: .time)")
+                }
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -86,11 +109,15 @@ private struct TaskCountdown: View {
     let startTime: Date
 
     var body: some View {
-        if startTime > .now {
-            Text(timerInterval: Date.now...startTime, countsDown: true)
-        } else {
-            Text("Now")
+        TimelineView(.periodic(from: .now, by: 1)) { timeline in
+            HStack(spacing: 0) {
+                if timeline.date >= startTime {
+                    Text("−")
+                }
+                Text(startTime, style: .timer)
+            }
         }
+        .accessibilityLabel("Time relative to activity start")
     }
 }
 
@@ -98,6 +125,7 @@ private struct DailyProgressRing: View {
     let completed: Int
     let total: Int
     let accent: Color
+    let categoryColor: Color
     let size: CGFloat
 
     private var progress: Double {
@@ -117,6 +145,12 @@ private struct DailyProgressRing: View {
                 .minimumScaleFactor(0.6)
         }
         .frame(width: size, height: size)
+        .overlay(alignment: .bottomTrailing) {
+            Circle()
+                .fill(categoryColor)
+                .frame(width: max(size * 0.24, 6), height: max(size * 0.24, 6))
+                .overlay { Circle().stroke(.black.opacity(0.65), lineWidth: 1) }
+        }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("Daily progress")
         .accessibilityValue("\(Int((progress * 100).rounded())) percent")
@@ -126,9 +160,20 @@ private struct DailyProgressRing: View {
 #Preview("Live Activity", as: .content, using: RitvaraActivityAttributes(
     taskID: UUID(),
     title: "Morning training",
-    startTime: .now.addingTimeInterval(1_800)
+    startTime: .now.addingTimeInterval(1_800),
+    categoryName: "Gym",
+    categoryColorHex: "FF453A"
 )) {
     RitvaraLiveActivity()
 } contentStates: {
     RitvaraActivityAttributes.ContentState(dailyCompleted: 3, dailyTotal: 7)
+}
+
+private func categoryColor(_ hexCode: String) -> Color {
+    let value = UInt64(hexCode, radix: 16) ?? 0x8E8E93
+    return Color(
+        red: Double((value >> 16) & 0xFF) / 255,
+        green: Double((value >> 8) & 0xFF) / 255,
+        blue: Double(value & 0xFF) / 255
+    )
 }

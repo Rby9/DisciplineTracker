@@ -17,11 +17,15 @@ enum RecurrenceSchedule {
 
     static func dates(
         from start: Date, through end: Date,
-        hour: Int, minute: Int, weekdays: Set<Int>,
+        hour: Int, minute: Int, weekdays: Set<Int>, intervalDays: Int? = nil,
+        anchoredAt anchor: Date? = nil,
         after cutoff: Date? = nil, excludingDay: Date? = nil,
         calendar: Calendar = .current
     ) throws -> [Date] {
-        guard !weekdays.isEmpty, weekdays.isSubset(of: Set(1...7)) else {
+        guard intervalDays.map({ (1...365).contains($0) }) ?? true else {
+            throw ScheduleError.invalidDate
+        }
+        guard intervalDays != nil || (!weekdays.isEmpty && weekdays.isSubset(of: Set(1...7))) else {
             throw ScheduleError.noWeekdays
         }
         guard (0...23).contains(hour), (0...59).contains(minute) else {
@@ -29,6 +33,7 @@ enum RecurrenceSchedule {
         }
         let first = calendar.startOfDay(for: start)
         let last = calendar.startOfDay(for: end)
+        let anchorDay = calendar.startOfDay(for: anchor ?? start)
         guard last >= first else { throw ScheduleError.invalidRange }
         guard let span = calendar.dateComponents([.day], from: first, to: last).day else {
             throw ScheduleError.invalidDate
@@ -38,7 +43,12 @@ enum RecurrenceSchedule {
             guard let day = calendar.date(byAdding: .day, value: offset, to: first) else {
                 throw ScheduleError.invalidDate
             }
-            guard weekdays.contains(calendar.component(.weekday, from: day)) else { return nil }
+            if let intervalDays {
+                let distance = calendar.dateComponents([.day], from: anchorDay, to: day).day ?? offset
+                guard distance >= 0, distance.isMultiple(of: intervalDays) else { return nil }
+            } else {
+                guard weekdays.contains(calendar.component(.weekday, from: day)) else { return nil }
+            }
             if let excludingDay, calendar.isDate(day, inSameDayAs: excludingDay) { return nil }
             // On a spring clock change, use the next valid time on that day.
             // On a repeated autumn hour, use the first occurrence only.

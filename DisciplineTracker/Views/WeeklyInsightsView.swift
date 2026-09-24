@@ -228,7 +228,7 @@ struct WeeklyInsightsView: View {
                         if let raw = entry(for: day)?.moodRaw,
                            let mood = JournalMood(rawValue: raw) {
                             Text(mood.emoji)
-                                .accessibilityLabel(mood.rawValue)
+                                .accessibilityLabel(Text(mood.title))
                         } else {
                             Image(systemName: "book.closed")
                                 .foregroundStyle(.secondary)
@@ -342,7 +342,8 @@ struct WeeklyInsightsView: View {
 
                                 if let raw = journal.moodRaw,
                                    let mood = JournalMood(rawValue: raw) {
-                                    Text("\(mood.emoji) \(mood.rawValue)")
+                                    Text(mood.emoji + " ")
+                                    + Text(mood.title)
                                         .font(.caption)
                                 }
                             }

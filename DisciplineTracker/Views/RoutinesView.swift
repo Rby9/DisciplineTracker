@@ -21,7 +21,7 @@ struct RoutinesView: View {
     @Query(sort: \TaskSeries.startDate, order: .reverse)
     private var routines: [TaskSeries]
 
-    private let accent = Color(hex: "8B7CFF")
+    @Query private var tasks: [TaskItem]
 
     // MARK: - Body
 
@@ -32,7 +32,7 @@ struct RoutinesView: View {
                     VStack(spacing: 12) {
                         Image(systemName: "repeat")
                             .font(.system(size: 32))
-                            .foregroundStyle(accent)
+                            .foregroundStyle(AppTheme.accent)
 
                         Text("No routines yet")
                             .font(.headline)
@@ -52,12 +52,12 @@ struct RoutinesView: View {
                         } label: {
                             routineRow(routine)
                         }
-                        .listRowBackground(Color(hex: "161426"))
+                        .listRowBackground(AppTheme.surface)
                     }
                 }
             }
             .scrollContentBackground(.hidden)
-            .background(Color(hex: "0D0B16"))
+            .background(AppTheme.background)
             .navigationTitle("Routines")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -67,14 +67,19 @@ struct RoutinesView: View {
                 }
             }
         }
-        .tint(accent)
+        .tint(AppTheme.accent)
         .preferredColorScheme(.dark)
     }
 
     // MARK: - Row
 
     private func routineRow(_ routine: TaskSeries) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
+        let streak = RoutineStreakCalculator.summary(
+            for: routine,
+            tasks: tasks
+        )
+
+        return VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Text(routine.title)
                     .font(.system(size: 17, weight: .semibold))
@@ -84,7 +89,7 @@ struct RoutinesView: View {
 
                 Text(status(for: routine))
                     .font(.system(size: 11, weight: .semibold))
-                    .foregroundStyle(accent)
+                    .foregroundStyle(AppTheme.accent)
             }
 
             Text(
@@ -98,6 +103,15 @@ struct RoutinesView: View {
             )
             .font(.system(size: 12))
             .foregroundStyle(.white.opacity(0.45))
+
+            HStack(spacing: 14) {
+                Label("\(streak.current) current", systemImage: "flame.fill")
+                    .foregroundStyle(streak.current > 0 ? .orange : .white.opacity(0.5))
+
+                Label("Best: \(streak.longest)", systemImage: "trophy.fill")
+                    .foregroundStyle(.white.opacity(0.65))
+            }
+            .font(.system(size: 12, weight: .semibold))
         }
         .padding(.vertical, 8)
     }
@@ -106,7 +120,7 @@ struct RoutinesView: View {
 
     private func weekdayText(_ weekdays: [Int]) -> String {
         if Set(weekdays) == Set(1...7) {
-            return "Every day"
+            return String(localized: "Every day")
         }
 
         let calendar = Calendar.current
@@ -133,13 +147,13 @@ struct RoutinesView: View {
         let today = calendar.startOfDay(for: Date())
 
         if calendar.startOfDay(for: routine.endDate) < today {
-            return "Ended"
+            return String(localized: "Ended")
         }
 
         if calendar.startOfDay(for: routine.startDate) > today {
-            return "Upcoming"
+            return String(localized: "Upcoming")
         }
 
-        return "Active"
+        return String(localized: "Active")
     }
 }

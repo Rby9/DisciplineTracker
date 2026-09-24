@@ -6,14 +6,65 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		7EDFFF39305B11B6002CFCC6 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EDFFF38305B11B6002CFCC6 /* WidgetKit.framework */; };
+		7EDFFF3B305B11B6002CFCC6 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EDFFF3A305B11B6002CFCC6 /* SwiftUI.framework */; };
+		7EDFFF46305B11B7002CFCC6 /* RitvaraLiveActivityExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 7EDFFF36305B11B6002CFCC6 /* RitvaraLiveActivityExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		7EDFFF44305B11B7002CFCC6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7EC5E4623039C5AB00C746AB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7EDFFF35305B11B6002CFCC6;
+			remoteInfo = RitvaraLiveActivityExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		7EDFFF47305B11B7002CFCC6 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				7EDFFF46305B11B7002CFCC6 /* RitvaraLiveActivityExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
-		7EC5E46A3039C5AB00C746AB /* DisciplineTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DisciplineTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7EC5E46A3039C5AB00C746AB /* Ritvara.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Ritvara.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7EDFFF36305B11B6002CFCC6 /* RitvaraLiveActivityExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = RitvaraLiveActivityExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		7EDFFF38305B11B6002CFCC6 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = /System/Library/Frameworks/WidgetKit.framework; sourceTree = "<absolute>"; };
+		7EDFFF3A305B11B6002CFCC6 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = /System/Library/Frameworks/SwiftUI.framework; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		7EDFFF4A305B11B7002CFCC6 /* Exceptions for "RitvaraLiveActivity" folder in "RitvaraLiveActivityExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 7EDFFF35305B11B6002CFCC6 /* RitvaraLiveActivityExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		7EC5E46C3039C5AB00C746AB /* DisciplineTracker */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = DisciplineTracker;
+			sourceTree = "<group>";
+		};
+		7EDFFF3C305B11B6002CFCC6 /* RitvaraLiveActivity */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				7EDFFF4A305B11B7002CFCC6 /* Exceptions for "RitvaraLiveActivity" folder in "RitvaraLiveActivityExtension" target */,
+			);
+			path = RitvaraLiveActivity;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -26,6 +77,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		7EDFFF33305B11B6002CFCC6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7EDFFF3B305B11B6002CFCC6 /* SwiftUI.framework in Frameworks */,
+				7EDFFF39305B11B6002CFCC6 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -33,6 +93,8 @@
 			isa = PBXGroup;
 			children = (
 				7EC5E46C3039C5AB00C746AB /* DisciplineTracker */,
+				7EDFFF3C305B11B6002CFCC6 /* RitvaraLiveActivity */,
+				7EDFFF37305B11B6002CFCC6 /* Frameworks */,
 				7EC5E46B3039C5AB00C746AB /* Products */,
 			);
 			sourceTree = "<group>";
@@ -40,9 +102,19 @@
 		7EC5E46B3039C5AB00C746AB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				7EC5E46A3039C5AB00C746AB /* DisciplineTracker.app */,
+				7EC5E46A3039C5AB00C746AB /* Ritvara.app */,
+				7EDFFF36305B11B6002CFCC6 /* RitvaraLiveActivityExtension.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		7EDFFF37305B11B6002CFCC6 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				7EDFFF38305B11B6002CFCC6 /* WidgetKit.framework */,
+				7EDFFF3A305B11B6002CFCC6 /* SwiftUI.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -55,10 +127,12 @@
 				7EC5E4663039C5AB00C746AB /* Sources */,
 				7EC5E4673039C5AB00C746AB /* Frameworks */,
 				7EC5E4683039C5AB00C746AB /* Resources */,
+				7EDFFF47305B11B7002CFCC6 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				7EDFFF45305B11B7002CFCC6 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				7EC5E46C3039C5AB00C746AB /* DisciplineTracker */,
@@ -67,8 +141,30 @@
 			packageProductDependencies = (
 			);
 			productName = DisciplineTracker;
-			productReference = 7EC5E46A3039C5AB00C746AB /* DisciplineTracker.app */;
+			productReference = 7EC5E46A3039C5AB00C746AB /* Ritvara.app */;
 			productType = "com.apple.product-type.application";
+		};
+		7EDFFF35305B11B6002CFCC6 /* RitvaraLiveActivityExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7EDFFF4B305B11B7002CFCC6 /* Build configuration list for PBXNativeTarget "RitvaraLiveActivityExtension" */;
+			buildPhases = (
+				7EDFFF32305B11B6002CFCC6 /* Sources */,
+				7EDFFF33305B11B6002CFCC6 /* Frameworks */,
+				7EDFFF34305B11B6002CFCC6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				7EDFFF3C305B11B6002CFCC6 /* RitvaraLiveActivity */,
+			);
+			name = RitvaraLiveActivityExtension;
+			packageProductDependencies = (
+			);
+			productName = RitvaraLiveActivityExtension;
+			productReference = 7EDFFF36305B11B6002CFCC6 /* RitvaraLiveActivityExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -77,11 +173,14 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 2660;
+				LastSwiftUpdateCheck = 2700;
 				LastUpgradeCheck = 2660;
 				TargetAttributes = {
 					7EC5E4693039C5AB00C746AB = {
 						CreatedOnToolsVersion = 26.6;
+					};
+					7EDFFF35305B11B6002CFCC6 = {
+						CreatedOnToolsVersion = 27.0;
 					};
 				};
 			};
@@ -101,12 +200,20 @@
 			projectRoot = "";
 			targets = (
 				7EC5E4693039C5AB00C746AB /* DisciplineTracker */,
+				7EDFFF35305B11B6002CFCC6 /* RitvaraLiveActivityExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		7EC5E4683039C5AB00C746AB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7EDFFF34305B11B6002CFCC6 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -123,7 +230,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		7EDFFF32305B11B6002CFCC6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		7EDFFF45305B11B7002CFCC6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7EDFFF35305B11B6002CFCC6 /* RitvaraLiveActivityExtension */;
+			targetProxy = 7EDFFF44305B11B7002CFCC6 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		7EC5E4733039C5AC00C746AB /* Debug */ = {
@@ -254,8 +376,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Z986B57CAJ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Ritvara;
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -267,7 +392,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "Balaban-Robert.DisciplineTracker";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Ritvara;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
@@ -285,8 +410,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Z986B57CAJ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Ritvara;
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -298,7 +426,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "Balaban-Robert.DisciplineTracker";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Ritvara;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
@@ -306,6 +434,88 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		7EDFFF48305B11B7002CFCC6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Z986B57CAJ;
+				ENABLE_APP_SANDBOX = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = RitvaraLiveActivity/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Ritvara;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 27.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "Balaban-Robert.DisciplineTracker.RitvaraLiveActivity";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				XROS_DEPLOYMENT_TARGET = 27.0;
+			};
+			name = Debug;
+		};
+		7EDFFF49305B11B7002CFCC6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Z986B57CAJ;
+				ENABLE_APP_SANDBOX = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = RitvaraLiveActivity/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Ritvara;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 27.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "Balaban-Robert.DisciplineTracker.RitvaraLiveActivity";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				XROS_DEPLOYMENT_TARGET = 27.0;
 			};
 			name = Release;
 		};
@@ -326,6 +536,15 @@
 			buildConfigurations = (
 				7EC5E4763039C5AC00C746AB /* Debug */,
 				7EC5E4773039C5AC00C746AB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7EDFFF4B305B11B7002CFCC6 /* Build configuration list for PBXNativeTarget "RitvaraLiveActivityExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7EDFFF48305B11B7002CFCC6 /* Debug */,
+				7EDFFF49305B11B7002CFCC6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

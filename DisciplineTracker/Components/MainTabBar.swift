@@ -2,7 +2,8 @@ import SwiftUI
 
 enum MainTab: String, CaseIterable {
     case today = "Today"
-    case weekly = "Weekly"
+    case weekly = "Plan"
+    case goals = "Goals"
 
     var icon: String {
         switch self {
@@ -10,6 +11,8 @@ enum MainTab: String, CaseIterable {
             return "checklist"
         case .weekly:
             return "calendar"
+        case .goals:
+            return "scope"
         }
     }
 }
@@ -36,14 +39,14 @@ struct MainTabBar: View {
             }
         }
         .padding(6)
-        .background(Color(hex: "161426"))
+        .background(AppTheme.surface)
         .clipShape(
             RoundedRectangle(cornerRadius: 22)
         )
         .overlay {
             RoundedRectangle(cornerRadius: 22)
                 .stroke(
-                    Color(hex: "2E2A4D"),
+                    AppTheme.border,
                     lineWidth: 1
                 )
         }
@@ -80,7 +83,7 @@ struct MainTabBar: View {
                         )
                     )
 
-                Text(tab.rawValue)
+                Text(LocalizedStringKey(tab.rawValue))
                     .font(
                         .system(
                             size: 15,
@@ -114,10 +117,10 @@ struct MainTabBar: View {
     private var selectionBackground: some View {
         if reduceMotion {
             RoundedRectangle(cornerRadius: 17)
-                .fill(Color(hex: "8B7CFF"))
+                .fill(AppTheme.accent)
         } else {
             RoundedRectangle(cornerRadius: 17)
-                .fill(Color(hex: "8B7CFF"))
+                .fill(AppTheme.accent)
                 .matchedGeometryEffect(
                     id: "selectedTab",
                     in: selectionAnimation

@@ -11,6 +11,16 @@ import SwiftData
 import Foundation
 
 struct EditRoutineView: View {
+    private enum RepeatPattern: String, CaseIterable, Identifiable {
+        case selectedDays, interval
+        var id: Self { self }
+        var title: LocalizedStringResource {
+            switch self {
+            case .selectedDays: "Selected days"
+            case .interval: "Every N days"
+            }
+        }
+    }
 
     // MARK: - Environment
 
@@ -21,18 +31,22 @@ struct EditRoutineView: View {
 
     let routine: TaskSeries
 
+    @Query private var tasks: [TaskItem]
+
     @State private var selectedWeekdays: Set<Int>
+    @State private var repeatPattern: RepeatPattern
+    @State private var intervalDays: Int
     @State private var selectedTime: Date
     @State private var endDate: Date
     @State private var effectiveDate: Date
     @State private var reminderOffsets: [Int]
+    @State private var pauseUntil: Date
+    @State private var showPauseConfirmation = false
 
     @State private var reviewedPlan: RoutineChangePlan?
     @State private var showConfirmation = false
     @State private var showError = false
     @State private var errorMessage = ""
-
-    private let accent = Color(hex: "8B7CFF")
 
     private var calendar: Calendar {
         Calendar.current
@@ -50,6 +64,8 @@ struct EditRoutineView: View {
         _selectedWeekdays = State(
             initialValue: Set(routine.weekdays)
         )
+        _repeatPattern = State(initialValue: routine.repeatIntervalDays == nil ? .selectedDays : .interval)
+        _intervalDays = State(initialValue: routine.repeatIntervalDays ?? 2)
 
         _selectedTime = State(
             initialValue: calendar.date(
@@ -61,6 +77,7 @@ struct EditRoutineView: View {
         )
 
         _endDate = State(initialValue: routine.endDate)
+        _pauseUntil = State(initialValue: calendar.date(byAdding: .day, value: 7, to: today) ?? today)
 
         _effectiveDate = State(
             initialValue: max(
@@ -75,15 +92,18 @@ struct EditRoutineView: View {
     var body: some View {
         AppForm {
             routineSection
-            weekdaysSection
+            performanceSection
+            historySection
+            frequencySection
             scheduleSection
+            pauseSection
             ReminderOptionsSection(offsets: $reminderOffsets, startTime: reminderPreviewDate)
             reviewSection
             stopSection
         }
         .navigationTitle("Edit Routine")
         .navigationBarTitleDisplayMode(.inline)
-        .tint(accent)
+        .tint(AppTheme.accent)
         .confirmationDialog(
             "Review changes",
             isPresented: $showConfirmation,
@@ -112,6 +132,253 @@ struct EditRoutineView: View {
         } message: {
             Text(errorMessage)
         }
+        .confirmationDialog(
+            "Pause this routine?",
+            isPresented: $showPauseConfirmation,
+            titleVisibility: .visible
+        ) {
+            Button("Pause routine") { pauseRoutine() }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("Upcoming occurrences through the selected day will be removed. They will not count as missed.")
+        }
+    }
+
+    // MARK: - Performance
+
+    private var streakSummary: RoutineStreakSummary {
+        RoutineStreakCalculator.summary(for: routine, tasks: tasks)
+    }
+
+    private var adherence: Double {
+        guard streakSummary.dueOccurrences > 0 else { return 0 }
+        return Double(streakSummary.completedOccurrences)
+            / Double(streakSummary.dueOccurrences)
+    }
+
+    private var missedOccurrences: Int {
+        max(streakSummary.dueOccurrences - streakSummary.completedOccurrences, 0)
+    }
+
+    private var performanceSection: some View {
+        Section {
+            HStack(spacing: 20) {
+                ZStack {
+                    Circle()
+                        .stroke(AppTheme.border, lineWidth: 9)
+                    Circle()
+                        .trim(from: 0, to: adherence)
+                        .stroke(
+                            AppTheme.accent,
+                            style: StrokeStyle(lineWidth: 9, lineCap: .round)
+                        )
+                        .rotationEffect(.degrees(-90))
+
+                    VStack(spacing: 1) {
+                        Text(adherence, format: .percent.precision(.fractionLength(0)))
+                            .font(.headline.monospacedDigit())
+                        Text("success")
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                .frame(width: 94, height: 94)
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel("Routine completion rate")
+                .accessibilityValue(adherence.formatted(.percent.precision(.fractionLength(0))))
+
+                VStack(spacing: 10) {
+                    performanceMetric(
+                        value: streakSummary.current,
+                        label: "Current streak",
+                        icon: "flame.fill",
+                        color: .orange
+                    )
+                    performanceMetric(
+                        value: streakSummary.longest,
+                        label: "Personal best",
+                        icon: "trophy.fill",
+                        color: .yellow
+                    )
+                }
+            }
+            .padding(.vertical, 8)
+
+            ViewThatFits(in: .horizontal) {
+                HStack(spacing: 10) { performanceTotals }
+                VStack(spacing: 10) { performanceTotals }
+            }
+        } header: {
+            Text("Performance")
+        } footer: {
+            Text("Only scheduled occurrences whose time has passed are included.")
+        }
+    }
+
+    @ViewBuilder
+    private var performanceTotals: some View {
+        performanceTotal(
+            value: streakSummary.completedOccurrences,
+            label: "Completed",
+            color: AppTheme.accent
+        )
+        performanceTotal(
+            value: missedOccurrences,
+            label: "Missed",
+            color: .red
+        )
+        performanceTotal(
+            value: routine.excludedDayKeys?.count ?? 0,
+            label: "Pauses",
+            color: .secondary
+        )
+    }
+
+    private func performanceMetric(
+        value: Int,
+        label: LocalizedStringKey,
+        icon: String,
+        color: Color
+    ) -> some View {
+        HStack(spacing: 9) {
+            Image(systemName: icon)
+                .foregroundStyle(color)
+                .frame(width: 22)
+            VStack(alignment: .leading, spacing: 1) {
+                Text(value, format: .number)
+                    .font(.headline.monospacedDigit())
+                Text(label)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            Spacer(minLength: 0)
+        }
+    }
+
+    private func performanceTotal(
+        value: Int,
+        label: LocalizedStringKey,
+        color: Color
+    ) -> some View {
+        VStack(spacing: 3) {
+            Text(value, format: .number)
+                .font(.headline.monospacedDigit())
+                .foregroundStyle(color)
+            Text(label)
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+        }
+        .padding(.vertical, 10)
+        .frame(maxWidth: .infinity)
+        .background(color.opacity(0.1), in: RoundedRectangle(cornerRadius: 12))
+    }
+
+    // MARK: - History
+
+    private var occurrenceHistory: [RoutineOccurrence] {
+        RoutineStreakCalculator.history(for: routine, tasks: tasks)
+    }
+
+    private var historySection: some View {
+        Section {
+            if occurrenceHistory.isEmpty {
+                ContentUnavailableView(
+                    "No history yet",
+                    systemImage: "calendar.badge.clock",
+                    description: Text("Scheduled appearances will be shown here.")
+                )
+            } else {
+                LazyVGrid(
+                    columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: 7),
+                    spacing: 12
+                ) {
+                    ForEach(occurrenceHistory) { occurrence in
+                        occurrenceTile(occurrence)
+                    }
+                }
+                .padding(.vertical, 8)
+
+                ViewThatFits(in: .horizontal) {
+                    HStack(spacing: 14) { historyLegend }
+                    VStack(alignment: .leading, spacing: 8) { historyLegend }
+                }
+            }
+        } header: {
+            Text("Recent routine history")
+        } footer: {
+            Text("Shows up to the last 28 scheduled appearances. Pauses do not count as misses.")
+        }
+    }
+
+    private func occurrenceTile(_ occurrence: RoutineOccurrence) -> some View {
+        VStack(spacing: 5) {
+            ZStack {
+                Circle()
+                    .fill(occurrenceColor(occurrence.state).opacity(0.16))
+                Image(systemName: occurrenceSymbol(occurrence.state))
+                    .font(.caption.bold())
+                    .foregroundStyle(occurrenceColor(occurrence.state))
+            }
+            .frame(width: 34, height: 34)
+
+            Text(occurrence.date, format: .dateTime.day())
+                .font(.caption2.bold().monospacedDigit())
+            Text(occurrence.date, format: .dateTime.month(.abbreviated))
+                .font(.system(size: 9))
+                .foregroundStyle(.secondary)
+        }
+        .frame(maxWidth: .infinity)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(occurrence.date.formatted(date: .complete, time: .omitted))
+        .accessibilityValue(occurrenceName(occurrence.state))
+    }
+
+    @ViewBuilder
+    private var historyLegend: some View {
+        legendItem("Done", state: .completed)
+        legendItem("Missed", state: .missed)
+        legendItem("Paused", state: .paused)
+        legendItem("Upcoming", state: .upcoming)
+    }
+
+    private func legendItem(
+        _ title: LocalizedStringKey,
+        state: RoutineOccurrenceState
+    ) -> some View {
+        Label {
+            Text(title)
+        } icon: {
+            Image(systemName: occurrenceSymbol(state))
+                .foregroundStyle(occurrenceColor(state))
+        }
+        .font(.caption2)
+    }
+
+    private func occurrenceColor(_ state: RoutineOccurrenceState) -> Color {
+        switch state {
+        case .completed: AppTheme.accent
+        case .missed: .red
+        case .paused: .secondary
+        case .upcoming: .blue
+        }
+    }
+
+    private func occurrenceSymbol(_ state: RoutineOccurrenceState) -> String {
+        switch state {
+        case .completed: "checkmark"
+        case .missed: "xmark"
+        case .paused: "pause.fill"
+        case .upcoming: "clock"
+        }
+    }
+
+    private func occurrenceName(_ state: RoutineOccurrenceState) -> String {
+        switch state {
+        case .completed: String(localized: "Completed")
+        case .missed: String(localized: "Missed")
+        case .paused: String(localized: "Paused")
+        case .upcoming: String(localized: "Upcoming")
+        }
     }
 
     // MARK: - Routine Section
@@ -134,24 +401,31 @@ struct EditRoutineView: View {
 
     // MARK: - Weekdays
 
-    private var weekdaysSection: some View {
-        Section("Repeat on") {
-            ForEach([2, 3, 4, 5, 6, 7, 1], id: \.self) { weekday in
-                Toggle(
-                    calendar.weekdaySymbols[weekday - 1],
-                    isOn: Binding(
-                        get: {
-                            selectedWeekdays.contains(weekday)
-                        },
-                        set: { selected in
-                            if selected {
-                                selectedWeekdays.insert(weekday)
-                            } else {
-                                selectedWeekdays.remove(weekday)
+    private var frequencySection: some View {
+        Section("Frequency") {
+            Picker("Repeat pattern", selection: $repeatPattern) {
+                ForEach(RepeatPattern.allCases) { pattern in
+                    Text(pattern.title).tag(pattern)
+                }
+            }
+
+            if repeatPattern == .selectedDays {
+                ForEach([2, 3, 4, 5, 6, 7, 1], id: \.self) { weekday in
+                    Toggle(
+                        calendar.weekdaySymbols[weekday - 1],
+                        isOn: Binding(
+                            get: { selectedWeekdays.contains(weekday) },
+                            set: { selected in
+                                if selected { selectedWeekdays.insert(weekday) }
+                                else { selectedWeekdays.remove(weekday) }
                             }
-                        }
+                        )
                     )
-                )
+                }
+            } else {
+                Stepper(value: $intervalDays, in: 2...30) {
+                    LabeledContent("Repeat interval", value: "Every \(intervalDays) days")
+                }
             }
         }
     }
@@ -181,6 +455,27 @@ struct EditRoutineView: View {
         }
     }
 
+    private var pauseSection: some View {
+        Section {
+            DatePicker(
+                "Pause through",
+                selection: $pauseUntil,
+                in: calendar.startOfDay(for: Date())...max(endDate, calendar.startOfDay(for: Date())),
+                displayedComponents: .date
+            )
+
+            Button {
+                showPauseConfirmation = true
+            } label: {
+                Label("Pause routine temporarily", systemImage: "pause.circle")
+            }
+        } header: {
+            Text("Temporary pause")
+        } footer: {
+            Text("Completed and individually edited activities are preserved. The routine resumes automatically after this date.")
+        }
+    }
+
     private var reminderPreviewDate: Date? {
         let time = calendar.dateComponents([.hour, .minute], from: selectedTime)
         return try? RecurrenceSchedule.dates(
@@ -188,6 +483,42 @@ struct EditRoutineView: View {
             hour: time.hour ?? 0, minute: time.minute ?? 0,
             weekdays: selectedWeekdays, after: Date()
         ).first
+    }
+
+    private func pauseRoutine() {
+        let now = Date()
+        let firstDay = calendar.startOfDay(for: now)
+        let lastDay = calendar.startOfDay(for: min(pauseUntil, routine.endDate))
+
+        do {
+            let dates = try RecurrenceSchedule.dates(
+                from: firstDay,
+                through: lastDay,
+                hour: routine.hour,
+                minute: routine.minute,
+                weekdays: Set(routine.weekdays),
+                intervalDays: routine.repeatIntervalDays,
+                anchoredAt: routine.startDate,
+                after: now
+            )
+            let newKeys = Set(dates.map(JournalEntry.key(for:)))
+            let existingKeys = Set(routine.excludedDayKeys ?? [])
+            routine.excludedDayKeys = Array(existingKeys.union(newKeys)).sorted()
+
+            let affectedTasks = tasks.filter { task in
+                guard task.seriesID == routine.id, task.isPending else { return false }
+                let originalDate = task.originalScheduledDate ?? task.startTime
+                let key = JournalEntry.key(for: originalDate)
+                let individuallyEdited = task.originalScheduledDate == nil || task.startTime != originalDate || task.title != routine.title
+                return newKeys.contains(key) && !individuallyEdited && task.startTime > now
+            }
+            affectedTasks.forEach(modelContext.delete)
+            try modelContext.save()
+            NotificationManager.shared.refreshNotifications()
+        } catch {
+            modelContext.rollback()
+            presentError(error)
+        }
     }
 
     // MARK: - Review
@@ -202,7 +533,7 @@ struct EditRoutineView: View {
                     systemImage: "checkmark.circle"
                 )
             }
-            .disabled(selectedWeekdays.isEmpty)
+            .disabled(repeatPattern == .selectedDays && selectedWeekdays.isEmpty)
         } footer: {
             Text(
                 "Review shows how many tasks will be added, updated or removed. Nothing changes until you confirm."
