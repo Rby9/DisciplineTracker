@@ -27,6 +27,8 @@ Proiectul a evoluat treptat de la o listă de activități la o aplicație care 
 | Astăzi | Plan săptămânal |
 |---|---|
 | <img src="Documentation/Screenshots/dashboard.png" width="280" alt="Ecranul Astăzi din Ritvara"> | <img src="Documentation/Screenshots/weekly-plan.png" width="280" alt="Planul săptămânal din Ritvara"> |
+| Obiective | Rutine |
+| <img src="Documentation/Screenshots/goals.png" width="280" alt="Ecranul Obiective din Ritvara"> | <img src="Documentation/Screenshots/routines.png" width="280" alt="Ecranul Rutine din Ritvara"> |
 
 ## Tehnologii folosite
 
@@ -104,6 +106,8 @@ The project gradually grew from a simple task list into an application with rout
 | Today | Weekly plan |
 |---|---|
 | <img src="Documentation/Screenshots/dashboard.png" width="280" alt="Ritvara Today screen"> | <img src="Documentation/Screenshots/weekly-plan.png" width="280" alt="Ritvara weekly plan"> |
+| Goals | Routines |
+| <img src="Documentation/Screenshots/goals.png" width="280" alt="Ritvara Goals screen"> | <img src="Documentation/Screenshots/routines.png" width="280" alt="Ritvara Routines screen"> |
 
 ### Technologies
 
