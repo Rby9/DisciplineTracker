@@ -1,0 +1,31 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "%@ • %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ • %2$@"
+          }
+        }
+      }
+    },
+    "%lld" : {
+
+    },
+    "%lld percent" : {
+
+    },
+    "−" : {
+
+    },
+    "Daily progress" : {
+
+    },
+    "Time relative to activity start" : {
+
+    }
+  },
+  "version" : "1.3"
+}
